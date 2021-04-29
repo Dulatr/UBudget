@@ -1,0 +1,152 @@
+﻿<Page
+    x:Class="UBudget.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UBudget"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="22*"/>
+        </Grid.RowDefinitions>
+        <CommandBar x:Name="MainCommandBar">
+            <AppBarButton x:Name="AddButton" 
+                          Label="Add" Icon="Add"
+                          AllowFocusOnInteraction="True">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <StackPanel>
+                            <Button x:Name="AccountAddSelection">Account
+                                <Button.Flyout>
+                                    <Flyout Placement="Full">
+                                        <StackPanel x:Name="AddAccountFlyoutPanel">
+                                            <TextBox x:Name="AccountNameInputTextBox"
+                                                     Header="Account Name:"/>
+                                            <TextBox x:Name="ValueInputTextBox"
+                                                     Header="Current Value:"/>
+                                            <Button x:Name="AddAccountBtn"
+                                                    HorizontalAlignment="Center"
+                                                    Padding="14"
+                                                    Content="Add">
+                                            </Button>
+                                        </StackPanel>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
+                            <Button x:Name="TxAddSelection"
+                                    Content="Transaction">
+                                <Button.Flyout>
+                                    <Flyout>
+                                        <StackPanel x:Name="AddTxFlyoutPanel">
+                                            <TextBox x:Name="TxAccountAssociatedTextBox"
+                                                     Header="Account associated with transaction:"/>
+                                            <TextBox x:Name="TxDateTextBox"
+                                                     Header="Date of transaction:"/>
+                                            <TextBox x:Name="TxAmountTextBox"
+                                                     Header="Amount for Transaction:"/>
+                                            <ListBox x:Name="TxLabelTextBox"/>
+                                            <Button  Content="Add"
+                                                     x:Name="AddTxButton"/>
+                                        </StackPanel>
+                                    </Flyout>
+                                </Button.Flyout>
+                            </Button>
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton x:Name="LabelButton"
+                          Label="Label" Icon="Edit"
+                          AllowFocusOnInteraction="True">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <StackPanel x:Name="LabelButtonFlyoutPanel">
+                            <TextBlock>Add a label to selected transaction</TextBlock>
+                            <ComboBox x:Name="LabelsBox"
+                                      SelectedIndex="0">
+                                <ComboBoxItem>Food</ComboBoxItem>
+                                <ComboBoxItem>Bills</ComboBoxItem>
+                                <ComboBoxItem>Misc.</ComboBoxItem>
+                            </ComboBox>
+                            <Button x:Name="AddLabelButton"
+                                    Content="Add"/>
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton x:Name ="DeleteButton" Label="Delete" Icon="Delete"
+                          AllowFocusOnInteraction="True">
+                <AppBarButton.Flyout>
+                    <Flyout Placement="Full">
+                        <StackPanel x:Name="DeleteButtonFlyoutPanel"
+                                    Orientation="Vertical">
+                            <TextBlock>Delete selected item?</TextBlock>
+                            <ComboBox x:Name="AccountOrTransactionList"
+                                      SelectedIndex="0">
+                                <ComboBoxItem>Account</ComboBoxItem>
+                                <ComboBoxItem>Transaction</ComboBoxItem>
+                            </ComboBox>
+                            <Button x:Name="DeleteSelectedButton"
+                                    Content="Delete"></Button>
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton
+                x:Name="AddIncomeCommandButton"
+                Label="Add"
+                Icon="Add"
+                AllowFocusOnInteraction="True">
+                <AppBarButton.Flyout>
+                    <Flyout Placement="Full">
+                        <StackPanel x:Name="AddIncomeCommandFlyoutPanel">
+                            <TextBox Header="Pay Date:"
+                                     
+                                     x:Name="IncomeDateBox"/>
+                            <TextBox Header="Type of Income:"
+                                     x:Name="IncomeLabelBox"/>
+                            <TextBox Header="Account Deposited into:"
+                                     x:Name="IncomeAccountIDBox"/>
+                            <TextBox Header="Net Pay:"
+                                     x:Name="NetPayBox"/>
+                            <TextBox Header="SIT:"
+                                     x:Name="SITBox"/>
+                            <TextBox Header="FIT:"
+                                     x:Name="FITBox"/>
+                            <TextBox Header="Misc. Tax:"
+                                     x:Name="MiscTaxBox"/>
+                            <TextBox Header="Gross Pay:"
+                                     x:Name="GrossPayBox"/>
+                            <TextBox Header="Associated Job ID:"
+                                     x:Name="JobIDBox"/>
+                            <Button Content="Add"
+                                    x:Name="AddIncomeFormButton"/>
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton x:Name="RemoveIncomeButton"
+                          Label="Remove"
+                          Icon="Remove"/>
+        </CommandBar>
+        <NavigationView x:Name="AppNav"
+                            PaneDisplayMode="Auto"
+                            Grid.Row="1">
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:Name="HomeSelection" Content="Home" Icon="Home"></NavigationViewItem>
+                <NavigationViewItem x:Name="TxSelection" Content="Transactions" Icon="DockBottom"></NavigationViewItem>
+                <NavigationViewItem x:Name="IncomeSelection" Content="Income" Icon="DockLeft"></NavigationViewItem>
+                <NavigationViewItem x:Name="TaxSelection" Content="Taxes" Icon="ViewAll"></NavigationViewItem>
+                <NavigationViewItem x:Name="BudgetSelection" Content="Budget" Icon="List"></NavigationViewItem>
+                <NavigationViewItem x:Name="ProjectSelection" Content="Projection" Icon="PreviewLink"></NavigationViewItem>
+            </NavigationView.MenuItems>
+            <Frame x:Name="MainFrame"/>
+        </NavigationView>        
+    </Grid>
+
+
+</Page>
