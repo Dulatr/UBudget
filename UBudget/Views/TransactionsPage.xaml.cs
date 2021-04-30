@@ -6,6 +6,7 @@ using Windows.UI.Xaml.Controls;
 
 using UBudget.Models;
 using UBudget.DAO;
+using Windows.UI.Xaml.Navigation;
 
 namespace UBudget.Views
 {
@@ -187,5 +188,16 @@ namespace UBudget.Views
             }
             
         }
-    }
+
+        // Cleans up any subscriptions to the MainPage so nothing weird is kept around in memory
+		protected override void OnNavigatedFrom(NavigationEventArgs e)
+		{
+			base.OnNavigatedFrom(e);
+
+            MainPage.removeFlyoutClickEvent("AddAccountBtn", AddAccountBtn_Click);
+            MainPage.removeFlyoutClickEvent("AddTxButton", AddTxButton_Click);
+            MainPage.removeFlyoutClickEvent("AddLabelButton", AddLabelButton_Click);
+            MainPage.removeFlyoutClickEvent("DeleteSelectedButton", DeleteSelectedButton_Click);
+        }
+	}
 }
