@@ -86,6 +86,13 @@ namespace UBudget.Views
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+
+            MainPage.removeFlyoutClickEvent("AddIncomeFormButton", AddIncomeFormButton_Click);
+            MainPage.removeCommandClickEvent("RemoveIncomeButton", RemoveIncomeButton_Click);
+        }
 
         private void RemoveIncomeButton_Click(object sender, RoutedEventArgs e)
         {
