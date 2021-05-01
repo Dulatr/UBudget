@@ -205,7 +205,7 @@ namespace UBudget
             }
         }
 
-        // Use this method to unregister events to the MainPage. Leaving events subscribed
+        // Use these methods to unregister events to the MainPage. Leaving events subscribed
         // has the unfortunate side effect of keeping the subscribed page in memory
         public static void removeFlyoutClickEvent(string flyoutButtonName, RoutedEventHandler method)
 		{
@@ -218,6 +218,17 @@ namespace UBudget
 				}
 			}
 		}
+        public static void removeCommandClickEvent(string commandButtonName, RoutedEventHandler method)
+        {
+            foreach (Button button in Commands.PrimaryCommands)
+            {
+                if (button.Name == commandButtonName)
+                {
+                    button.Click -= method;
+                    EventsThatHaveBeenRouted.Remove(method);
+                }
+            }
+        }
     }
 
 }
