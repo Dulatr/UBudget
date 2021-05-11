@@ -139,6 +139,10 @@ namespace UBudget
                 {
                     this.MainFrame.Navigate(typeof(IncomePage));
                 }
+                if (args.InvokedItem is "Budget")
+                {
+                    this.MainFrame.Navigate(typeof(BudgetPage));
+                }
             }
         }
         
