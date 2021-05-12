@@ -96,8 +96,7 @@
                     </Flyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
-            <AppBarButton
-                x:Name="AddIncomeCommandButton"
+            <AppBarButton x:Name="AddIncomeCommandButton"
                 Label="Add"
                 Icon="Add"
                 AllowFocusOnInteraction="True">
@@ -132,6 +131,22 @@
             <AppBarButton x:Name="RemoveIncomeButton"
                           Label="Remove"
                           Icon="Remove"/>
+            <AppBarButton x:Name="AddCategoryColor"
+                          Icon="Add">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <StackPanel x:Name="AddCategoryColorFlyout">
+                            <ComboBox x:Name="CategoryColorSelection">
+                                <SolidColorBrush Color="AliceBlue"/>
+                                <SolidColorBrush Color="Green"/>
+                                <SolidColorBrush Color="Red"/>
+                            </ComboBox>
+                            <Button x:Name="AddColorButton"
+                                Content="Add To Selected"/>
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
         </CommandBar>
         <NavigationView x:Name="AppNav"
                             PaneDisplayMode="Auto"

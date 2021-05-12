@@ -49,7 +49,20 @@ namespace UBudget.Views
             }
 
             MainPage.setCommandsToPage(this);
+            MainPage.setFlyoutButtonClickEvent("AddColorButton",OnButtonClick);
         }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            MainPage.removeFlyoutClickEvent("AddColorButton", OnButtonClick);
+        }
+
+        private void OnButtonClick(object sender,RoutedEventArgs e)
+        {
+            ;
+        }
+
 
     }
 }
