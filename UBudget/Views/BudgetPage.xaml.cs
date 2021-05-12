@@ -47,6 +47,8 @@ namespace UBudget.Views
                     }
                 }                
             }
+
+            MainPage.setCommandsToPage(this);
         }
 
     }

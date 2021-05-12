@@ -179,6 +179,13 @@ namespace UBudget
                         button.Visibility = Visibility.Collapsed;
                 }
             }
+            else if (page is BudgetPage)
+            {
+                foreach (AppBarButton button in Commands.PrimaryCommands)
+                {
+                    button.Visibility = Visibility.Collapsed;
+                }
+            }
         }
         public static void setFlyoutButtonClickEvent(string flyoutButtonName,RoutedEventHandler method)
         {
