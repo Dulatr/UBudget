@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UBudget.DAO;
 using UBudget.Models;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -19,13 +20,34 @@ namespace UBudget.Views
 {
     public sealed partial class BudgetPage : Page
     {
-        private ObservableCollection<BudgetCategory> test = new ObservableCollection<BudgetCategory>();
+        private ObservableCollection<BudgetCategory> categories = new ObservableCollection<BudgetCategory>();
 
         public BudgetPage()
         {
             this.InitializeComponent();
 
-            Categories.ItemsSource = test;
+            this.Categories.ItemsSource = categories;
+
+            foreach (Transaction tx in App.Servicer.getAllTx())
+            {
+                if (!String.IsNullOrEmpty(tx.Label))
+                {
+                    if(!categories.Any((x) => x.Name == tx.Label))
+                    {
+                        categories.Add(new BudgetCategory()
+                        {
+                            Name=tx.Label,
+                            Amount=tx.Amount,
+                        });
+                    }
+                    else
+                    {
+                        var category = categories.First((x) => x.Name == tx.Label);
+                        category.Amount += tx.Amount;
+                    }
+                }                
+            }
         }
+
     }
 }

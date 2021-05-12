@@ -10,21 +10,31 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <ListView x:Name="Categories">
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="MinWidth" Value="320"/>
+            </Style>
+        </ListView.ItemContainerStyle>
         <ListView.ItemsPanel>
             <ItemsPanelTemplate>
-                <StackPanel Orientation="Horizontal"/>
+                <StackPanel Orientation="Horizontal" Padding="30" Spacing="14" BorderThickness="11"/>
             </ItemsPanelTemplate>
         </ListView.ItemsPanel>
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="models:BudgetCategory">
-                <Grid>
+                <Grid Background="{x:Bind Brush}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="3*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="{x:Bind Name,Mode=TwoWay}"/>
-                    <TextBlock Grid.Row="1" Text="{x:Bind Amount,Mode=TwoWay}"/>
-                </Grid>
+
+                    <Viewbox Grid.Row="0" Stretch="Fill">
+                        <TextBlock Text="{x:Bind Name,Mode=TwoWay}" HorizontalAlignment="Center"/>                        
+                    </Viewbox>
+                    <Viewbox Grid.Row="1" Stretch="Fill">
+                        <TextBlock Grid.Row="1" Text="{x:Bind Amount,Mode=TwoWay}"/>
+                    </Viewbox>
+                </Grid>                
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>
