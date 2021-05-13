@@ -50,6 +50,12 @@ namespace UBudget.Views
                 }                
             }
 
+            foreach (Settings setting in App.Servicer.getSettings())
+            {
+                categories.FirstOrDefault((x) => x.Name == setting.categoryName).Brush = toColor(setting.categoryColor);
+            }
+
+
             MainPage.setCommandsToPage(this);
             MainPage.setFlyoutButtonClickEvent("AddColorButton",OnButtonClick);
         }
@@ -66,32 +72,40 @@ namespace UBudget.Views
             var selectedCategory = Categories.SelectedItem as BudgetCategory;
             if (selectedCategory != null && selectedColor != null)
             {
-                SolidColorBrush chosenColor;
-                switch (selectedColor)
-                {
-                    case "Red":
-                        chosenColor = new SolidColorBrush(Windows.UI.Colors.Red);
-                        break;
-                    case "Blue":
-                        chosenColor = new SolidColorBrush(Windows.UI.Colors.Blue);
-                        break;
-                    case "Green":
-                        chosenColor = new SolidColorBrush(Windows.UI.Colors.Green);
-                        break;
-                    default:
-                        chosenColor = new SolidColorBrush(Windows.UI.Colors.DarkGray);
-                        break;
-                }
-                categories.FirstOrDefault((x) => x.Name == selectedCategory.Name).Brush = chosenColor;
+                categories.FirstOrDefault((x) => x.Name == selectedCategory.Name).Brush = toColor(selectedColor);
 
                 //just force the updated collection on the itemsource
                 //it's moderately consentual. and the items are tiny anyways
                 Categories.ItemsSource = null;
                 Categories.ItemsSource = categories;
+
+                if (App.Servicer.getSettings().FirstOrDefault<Settings>((x) => x.categoryName == selectedCategory.Name) == null)
+                    App.Servicer.addSetting(new Settings() { categoryName = selectedCategory.Name, categoryColor = selectedColor });
+                else
+                    App.Servicer.updateSetting(selectedCategory.Name, selectedColor);
             }
 
         }
 
-
+        private SolidColorBrush toColor(string color)
+        {
+            SolidColorBrush chosenColor;
+            switch (color)
+            {
+                case "Red":
+                    chosenColor = new SolidColorBrush(Windows.UI.Colors.Red);
+                    break;
+                case "Blue":
+                    chosenColor = new SolidColorBrush(Windows.UI.Colors.Blue);
+                    break;
+                case "Green":
+                    chosenColor = new SolidColorBrush(Windows.UI.Colors.Green);
+                    break;
+                default:
+                    chosenColor = new SolidColorBrush(Windows.UI.Colors.DarkGray);
+                    break;
+            }
+            return chosenColor;
+        }
     }
 }
