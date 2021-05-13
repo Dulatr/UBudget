@@ -22,7 +22,7 @@
         </ListView.ItemsPanel>
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="models:BudgetCategory">
-                <Grid Background="{x:Bind Brush}">
+                <Grid Background="{x:Bind Brush,Mode=TwoWay}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="3*"/>

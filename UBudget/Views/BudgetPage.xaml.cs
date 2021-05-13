@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -26,6 +27,7 @@ namespace UBudget.Views
         {
             this.InitializeComponent();
 
+            this.Categories.ItemsSource = null;
             this.Categories.ItemsSource = categories;
 
             foreach (Transaction tx in App.Servicer.getAllTx())
@@ -60,7 +62,34 @@ namespace UBudget.Views
 
         private void OnButtonClick(object sender,RoutedEventArgs e)
         {
-            ;
+            var selectedColor = (MainPage.FlyoutComboBoxInputs.Find((x) => x.Name == "CategoryColorSelection").SelectedItem as ComboBoxItem)?.Content.ToString();
+            var selectedCategory = Categories.SelectedItem as BudgetCategory;
+            if (selectedCategory != null && selectedColor != null)
+            {
+                SolidColorBrush chosenColor;
+                switch (selectedColor)
+                {
+                    case "Red":
+                        chosenColor = new SolidColorBrush(Windows.UI.Colors.Red);
+                        break;
+                    case "Blue":
+                        chosenColor = new SolidColorBrush(Windows.UI.Colors.Blue);
+                        break;
+                    case "Green":
+                        chosenColor = new SolidColorBrush(Windows.UI.Colors.Green);
+                        break;
+                    default:
+                        chosenColor = new SolidColorBrush(Windows.UI.Colors.DarkGray);
+                        break;
+                }
+                categories.FirstOrDefault((x) => x.Name == selectedCategory.Name).Brush = chosenColor;
+
+                //just force the updated collection on the itemsource
+                //it's moderately consentual. and the items are tiny anyways
+                Categories.ItemsSource = null;
+                Categories.ItemsSource = categories;
+            }
+
         }
 
 

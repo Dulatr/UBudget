@@ -132,14 +132,15 @@
                           Label="Remove"
                           Icon="Remove"/>
             <AppBarButton x:Name="AddCategoryColor"
-                          Icon="Add">
+                          Icon="Add"
+                          AllowFocusOnInteraction="True">
                 <AppBarButton.Flyout>
                     <Flyout>
                         <StackPanel x:Name="AddCategoryColorFlyout">
                             <ComboBox x:Name="CategoryColorSelection">
-                                <SolidColorBrush Color="AliceBlue"/>
-                                <SolidColorBrush Color="Green"/>
-                                <SolidColorBrush Color="Red"/>
+                                <ComboBoxItem>Blue</ComboBoxItem>
+                                <ComboBoxItem>Green</ComboBoxItem>
+                                <ComboBoxItem>Red</ComboBoxItem>
                             </ComboBox>
                             <Button x:Name="AddColorButton"
                                 Content="Add To Selected"/>
