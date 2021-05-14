@@ -28,7 +28,8 @@ namespace UBudget.DAO
         }
         public List<PayStub> getAllIncome()
         {
-            return App.Database.GetCollection<PayStub>("paystubs").FindAll().ToList();
+            var stubs = App.Database.GetCollection<PayStub>("paystubs").FindAll();
+            return (stubs != null) ? stubs.ToList() : new List<PayStub>();
         }
         public List<Settings> getSettings()
         {

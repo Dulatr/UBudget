@@ -146,6 +146,10 @@ namespace UBudget
                 {
                     this.MainFrame.Navigate(typeof(BudgetPage));
                 }
+                if (args.InvokedItem is "Projection")
+                {
+                    this.MainFrame.Navigate(typeof(ProjectionPage));
+                }
             }
         }
         
@@ -167,6 +171,10 @@ namespace UBudget
             else if (page is BudgetPage)
             {
                 UpdateCommands(new List<string>() { "AddCategoryColor" });
+            }
+            else if (page is ProjectionPage)
+            {
+                UpdateCommands(new List<string>());
             }
         }
         public static void setFlyoutButtonClickEvent(string flyoutButtonName,RoutedEventHandler method)
