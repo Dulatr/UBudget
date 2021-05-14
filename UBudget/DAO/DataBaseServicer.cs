@@ -30,6 +30,10 @@ namespace UBudget.DAO
         {
             return App.Database.GetCollection<PayStub>("paystubs").FindAll().ToList();
         }
+        public List<Settings> getSettings()
+        {
+            return App.Database.GetCollection<Settings>("categoryColorSettings").FindAll().ToList();
+        }
         public Account getAccountById(int ID)
         {
             var collection = App.Database.GetCollection<Account>("accounts");
@@ -145,6 +149,20 @@ namespace UBudget.DAO
 
             stubCollection.Delete(stubID);
 
+        }
+        public void addSetting(Settings setting)
+        {
+            if (setting == null)
+            {
+                return;
+            }
+            App.Database.GetCollection<Settings>("categoryColorSettings").Insert(setting);
+        }
+        public void updateSetting(string name, string color)
+        {
+            var setting = getSettings().First((x) => x.categoryName == name);
+            setting.categoryColor = color;
+            App.Database.GetCollection<Settings>("categoryColorSettings").Update(setting);
         }
     }
 

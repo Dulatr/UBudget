@@ -25,6 +25,8 @@ namespace UBudget
     public sealed partial class MainPage : Page
     {
         // Properties
+        private static List<string> IncomeButtons = new List<string>() { "AddIncomeCommandButton", "RemoveIncomeButton" };
+        private static List<string> TransactionButtons = new List<string>() { "AddButton","LabelButton","DeleteButton" };
         private static CommandBar commands;
         private static CommandBar Commands
         {
@@ -105,6 +107,7 @@ namespace UBudget
             flyoutPanels.Add(LabelButtonFlyoutPanel);
             flyoutPanels.Add(DeleteButtonFlyoutPanel);
             flyoutPanels.Add(AddIncomeCommandFlyoutPanel);
+            flyoutPanels.Add(AddCategoryColorFlyout);
 
             foreach (StackPanel panel in flyoutPanels)
             {
@@ -139,6 +142,10 @@ namespace UBudget
                 {
                     this.MainFrame.Navigate(typeof(IncomePage));
                 }
+                if (args.InvokedItem is "Budget")
+                {
+                    this.MainFrame.Navigate(typeof(BudgetPage));
+                }
             }
         }
         
@@ -147,33 +154,19 @@ namespace UBudget
         {
             if (page is MainPage || page is HomePage)
             {
-                foreach (AppBarButton button in Commands.PrimaryCommands)
-                {
-                    button.Visibility = Visibility.Collapsed;
-                }
+                UpdateCommands(new List<string>());
             }
             else if (page is IncomePage)
             {
-                foreach (AppBarButton button in Commands.PrimaryCommands){
-                    if (button.Name == "AddIncomeCommandButton" || button.Name == "RemoveIncomeButton")
-                    {
-                        button.Visibility = Visibility.Visible;
-                    }
-                    else
-                        button.Visibility = Visibility.Collapsed;
-                }
+                UpdateCommands(IncomeButtons);
             }
             else if (page is TransactionsPage)
             {
-                foreach (AppBarButton button in Commands.PrimaryCommands)
-                {
-                    if (button.Name == "AddButton" || button.Name == "LabelButton" || button.Name == "DeleteButton")
-                    {
-                        button.Visibility = Visibility.Visible;
-                    }
-                    else
-                        button.Visibility = Visibility.Collapsed;
-                }
+                UpdateCommands(TransactionButtons);
+            }
+            else if (page is BudgetPage)
+            {
+                UpdateCommands(new List<string>() { "AddCategoryColor" });
             }
         }
         public static void setFlyoutButtonClickEvent(string flyoutButtonName,RoutedEventHandler method)
@@ -226,6 +219,22 @@ namespace UBudget
                 {
                     button.Click -= method;
                     EventsThatHaveBeenRouted.Remove(method);
+                }
+            }
+        }
+
+        // Helper Methods
+        private static void UpdateCommands(List<string> buttonList)
+        {
+            foreach (Button button in Commands.PrimaryCommands)
+            {
+                if (buttonList.Any((x)=>x==button.Name))
+                {
+                    button.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    button.Visibility = Visibility.Collapsed;
                 }
             }
         }
