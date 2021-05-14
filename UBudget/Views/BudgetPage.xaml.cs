@@ -52,7 +52,9 @@ namespace UBudget.Views
 
             foreach (Settings setting in App.Servicer.getSettings())
             {
-                categories.FirstOrDefault((x) => x.Name == setting.categoryName).Brush = toColor(setting.categoryColor);
+                var settingFor = categories.FirstOrDefault((x) => x.Name == setting.categoryName);
+                if (settingFor != null)
+                    settingFor.Brush = toColor(setting.categoryColor);
             }
 
 
@@ -75,7 +77,7 @@ namespace UBudget.Views
                 categories.FirstOrDefault((x) => x.Name == selectedCategory.Name).Brush = toColor(selectedColor);
 
                 //just force the updated collection on the itemsource
-                //it's moderately consentual. and the items are tiny anyways
+                //it's moderately consensual. and the items are tiny anyways
                 Categories.ItemsSource = null;
                 Categories.ItemsSource = categories;
 
