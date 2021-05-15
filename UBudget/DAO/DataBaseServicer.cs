@@ -22,9 +22,29 @@ namespace UBudget.DAO
         {
             return App.Database.GetCollection<Account>("accounts").FindAll().ToList();
         }
-        public List<Transaction> getAllTx()
+        public List<Transaction> getAllTx(DateTime start = new DateTime(), DateTime end = new DateTime())
         {
-            return App.Database.GetCollection<Transaction>("transactions").FindAll().ToList();
+            if (start.Year == 1 && end.Year == 1)
+                return App.Database.GetCollection<Transaction>("transactions").FindAll().ToList();
+            else if (start.Year == 1 && end.Year != 1)
+            {
+                return App.Database.GetCollection<Transaction>("transactions").Find(
+                    (x) => (x.DateTime == start)
+                ).ToList();
+            }
+            else if (start.Year != 1 && end.Year == 1)
+            {
+                return App.Database.GetCollection<Transaction>("transactions").Find(
+                    (x) => (x.DateTime == end)
+                ).ToList();
+            }
+            else
+            {
+                return App.Database.GetCollection<Transaction>("transactions").Find(
+                   (x) => (x.DateTime >= start && x.DateTime <= end)
+                ).ToList();
+            }
+
         }
         public List<PayStub> getAllIncome()
         {

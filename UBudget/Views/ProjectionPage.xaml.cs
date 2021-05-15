@@ -1,4 +1,5 @@
 ﻿using OxyPlot;
+using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
@@ -32,20 +33,81 @@ namespace UBudget.Views
         {
             this.InitializeComponent();
 
-            Data = new PlotModel();
+            Data = new PlotModel();   
+            var accountTotal = new ColumnSeries();
+            var billTotal = new ColumnSeries();
+            var categoryAxis = new CategoryAxis();
+            var linearAxis = new LinearAxis();
 
-            var accountTotal = new BarSeries();
-            var incomeTotal = new BarSeries();
+            #region Plot and Axis Settings
 
+            ProjectionsPlot.Background = new SolidColorBrush(Windows.UI.Colors.Transparent);
+ 
+            Data.Title = "Estimate of account total based on previous income";
+            Data.TitleFontSize = 24;
+            Data.TitleColor = OxyColors.White;
+            Data.PlotAreaBorderColor = OxyColors.White;
 
-            accountTotal.Items.Add(new BarItem(getAccountsTotal()) { Color=OxyColors.RosyBrown});
-            incomeTotal.Items.Add(new BarItem(getRecentPaystubTotal()) { Color=OxyColors.ForestGreen });
+            linearAxis.Title = "Net Value in USD";
+            linearAxis.TitleFontSize = 18;
+            linearAxis.AxisTitleDistance = 15;
+            linearAxis.MinorTickSize = 250;
+            linearAxis.MinorTickSize = 3;
+            linearAxis.IsZoomEnabled = false;
+
+            linearAxis.TextColor = OxyColors.White;
+            linearAxis.TicklineColor = OxyColors.White;
+            linearAxis.TitleColor = OxyColors.White;
+
+            categoryAxis.Title = "Date";
+            categoryAxis.TitleFontSize = 18;
+            categoryAxis.AxisTitleDistance = 15;
+            categoryAxis.IsZoomEnabled = false;
+
+            categoryAxis.TextColor = OxyColors.White;
+            categoryAxis.TicklineColor = OxyColors.White;
+            categoryAxis.TitleColor = OxyColors.White;
+
+            #endregion
+
+            DateTime today = DateTime.Today;
+            categoryAxis.Labels.Add($"{today.Month}/{DateTime.DaysInMonth(today.Year, today.Month)}");
+            categoryAxis.Labels.Add($"{today.AddMonths(1).Month}/{DateTime.DaysInMonth(today.Year,today.AddMonths(1).Month)}");
+            categoryAxis.Labels.Add($"{today.AddMonths(2).Month}/{DateTime.DaysInMonth(today.Year, today.AddMonths(2).Month)}");
+
+            Data.Axes.Add(categoryAxis);
+            Data.Axes.Add(linearAxis);
+
+            var txs = App.Servicer.getAllTx(
+                new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
+                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
+            );
+
+            var bills = txs?.FindAll(
+                (x) => x.Label == "Bills"
+            );
+
+            double _billAmount = 0.0;
+
+            foreach (Transaction bill in bills)
+            {
+                _billAmount += bill.Amount;
+            }
+
+            billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
+            billTotal.Items.Add(new ColumnItem(_billAmount * 2.0) { Color = OxyColors.Red });
+            billTotal.Items.Add(new ColumnItem(_billAmount * 3.0) { Color = OxyColors.Red });
+
+            accountTotal.Items.Add(new ColumnItem(getAccountsTotal()) { Color = OxyColors.ForestGreen });
+            accountTotal.Items.Add(new ColumnItem(getAccountsTotal() + getRecentPaystubTotal() * 2.0 - _billAmount) { Color = OxyColors.ForestGreen });
+            accountTotal.Items.Add(new ColumnItem(getAccountsTotal() + getRecentPaystubTotal() * 4.0 - _billAmount * 2.0) { Color = OxyColors.ForestGreen });
 
             accountTotal.IsStacked = true;
-            incomeTotal.IsStacked = true;
+            billTotal.IsStacked = true;
 
             Data.Series.Add(accountTotal);
-            Data.Series.Add(incomeTotal);
+            Data.Series.Add(billTotal);
+
             MainPage.setCommandsToPage(this);
         }
 
@@ -66,6 +128,10 @@ namespace UBudget.Views
             var stubs = App.Servicer.getAllIncome();
             var lastStub = (stubs.Count != 0 ) ? stubs.Last() : null;
             return (lastStub != null) ? lastStub.GrossAmount : 0.0;
+        }
+        private double getBillTotal()
+        {
+            return App.Servicer.getAllTx().Last((x) => x.Label == "Bill").Amount;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
