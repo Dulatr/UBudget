@@ -34,8 +34,8 @@ namespace UBudget.Views
             this.InitializeComponent();
 
             Data = new PlotModel();   
-            var accountTotal = new ColumnSeries();
-            var billTotal = new ColumnSeries();
+            var accountTotal = new ColumnSeries() { FillColor = OxyColors.ForestGreen };
+            var billTotal = new ColumnSeries() { FillColor = OxyColors.Red };
             var categoryAxis = new CategoryAxis();
             var linearAxis = new LinearAxis();
 
@@ -44,26 +44,31 @@ namespace UBudget.Views
             ProjectionsPlot.Background = new SolidColorBrush(Windows.UI.Colors.Transparent);
  
             Data.Title = "Estimate of account total based on previous income";
+            linearAxis.Title = "Net Value in USD";
+            categoryAxis.Title = "Date";
+            accountTotal.Title = "Account Total";
+            billTotal.Title = "Bill Total";
+
             Data.TitleFontSize = 24;
+            Data.LegendPlacement = LegendPlacement.Inside;
+            Data.LegendPosition = LegendPosition.RightMiddle;
+            Data.IsLegendVisible = true;
             Data.TitleColor = OxyColors.White;
             Data.PlotAreaBorderColor = OxyColors.White;
+            Data.LegendBackground = OxyColors.White;
 
-            linearAxis.Title = "Net Value in USD";
             linearAxis.TitleFontSize = 18;
             linearAxis.AxisTitleDistance = 15;
             linearAxis.MinorTickSize = 250;
             linearAxis.MinorTickSize = 3;
             linearAxis.IsZoomEnabled = false;
-
             linearAxis.TextColor = OxyColors.White;
             linearAxis.TicklineColor = OxyColors.White;
             linearAxis.TitleColor = OxyColors.White;
 
-            categoryAxis.Title = "Date";
             categoryAxis.TitleFontSize = 18;
             categoryAxis.AxisTitleDistance = 15;
             categoryAxis.IsZoomEnabled = false;
-
             categoryAxis.TextColor = OxyColors.White;
             categoryAxis.TicklineColor = OxyColors.White;
             categoryAxis.TitleColor = OxyColors.White;
