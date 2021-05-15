@@ -25,6 +25,20 @@ namespace UBudget.Views
         public TaxPage()
         {
             this.InitializeComponent();
+
+            MainPage.setFlyoutButtonClickEvent("AddTaxFormFlyoutButton", addButtonClick);
+            MainPage.setCommandsToPage(this);
+        }
+
+        private void addButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            MainPage.removeFlyoutClickEvent("AddTaxFormFlyoutButton", addButtonClick);
         }
     }
 }

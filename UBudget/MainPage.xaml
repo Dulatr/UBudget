@@ -103,8 +103,7 @@
                 <AppBarButton.Flyout>
                     <Flyout Placement="Full">
                         <StackPanel x:Name="AddIncomeCommandFlyoutPanel">
-                            <TextBox Header="Pay Date:"
-                                     
+                            <TextBox Header="Pay Date:"                             
                                      x:Name="IncomeDateBox"/>
                             <TextBox Header="Type of Income:"
                                      x:Name="IncomeLabelBox"/>
@@ -148,6 +147,26 @@
                     </Flyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
+            <AppBarButton x:Name="AddTaxFormCommandButton"
+                          Icon="Add">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <StackPanel x:Name="AddTaxFormFlyout">
+                            <TextBox x:Name="FIT_FormBox"
+                                     Header="Federal Tax Amount:"/>
+                            <TextBox x:Name="SIT_FormBox"
+                                     Header="State Tax Amount:"/>
+                            <TextBox x:Name="Misc_FormBox"
+                                     Header="Misc. Tax Amount:"/>
+                            <Button x:Name="AddTaxFormFlyoutButton"
+                                    Content="Add"/>
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarButton x:Name="RemoveTaxFormCommandButton"
+                          Icon="Remove">
+            </AppBarButton>
         </CommandBar>
         <NavigationView x:Name="AppNav"
                             PaneDisplayMode="Auto"
@@ -156,7 +175,7 @@
                 <NavigationViewItem x:Name="HomeSelection" Content="Home" Icon="Home"></NavigationViewItem>
                 <NavigationViewItem x:Name="TxSelection" Content="Transactions" Icon="DockBottom"></NavigationViewItem>
                 <NavigationViewItem x:Name="IncomeSelection" Content="Income" Icon="DockLeft"></NavigationViewItem>
-                <NavigationViewItem x:Name="TaxSelection" Content="Taxes" Icon="ViewAll"></NavigationViewItem>
+                <!--<NavigationViewItem x:Name="TaxSelection" Content="Taxes" Icon="ViewAll"></NavigationViewItem>-->
                 <NavigationViewItem x:Name="BudgetSelection" Content="Budget" Icon="List"></NavigationViewItem>
                 <NavigationViewItem x:Name="ProjectSelection" Content="Projection" Icon="PreviewLink"></NavigationViewItem>
             </NavigationView.MenuItems>

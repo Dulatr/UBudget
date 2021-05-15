@@ -134,22 +134,27 @@ namespace UBudget
                 {
                     this.MainFrame.Navigate(typeof(HomePage));
                 }
-                if (args.InvokedItem is "Transactions")
+                else if (args.InvokedItem is "Transactions")
                 {
                     this.MainFrame.Navigate(typeof(TransactionsPage));
                 }
-                if(args.InvokedItem is "Income")
+                else if(args.InvokedItem is "Income")
                 {
                     this.MainFrame.Navigate(typeof(IncomePage));
                 }
-                if (args.InvokedItem is "Budget")
+                else if (args.InvokedItem is "Budget")
                 {
                     this.MainFrame.Navigate(typeof(BudgetPage));
                 }
-                if (args.InvokedItem is "Projection")
+                else if (args.InvokedItem is "Projection")
                 {
                     this.MainFrame.Navigate(typeof(ProjectionPage));
                 }
+                else if (args.InvokedItem is "Taxes")
+                {
+                    this.MainFrame.Navigate(typeof(TaxPage));
+                }
+
             }
         }
         
@@ -176,6 +181,10 @@ namespace UBudget
             {
                 UpdateCommands(new List<string>());
             }
+            //else if (page is TaxPage)
+            //{
+            //    UpdateCommands(new List<string>() { "AddTaxFormCommandButton", "RemoveTaxFormCommandButton" });
+            //}
         }
         public static void setFlyoutButtonClickEvent(string flyoutButtonName,RoutedEventHandler method)
         {
