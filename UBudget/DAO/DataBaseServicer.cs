@@ -46,10 +46,32 @@ namespace UBudget.DAO
             }
 
         }
-        public List<PayStub> getAllIncome()
+        public List<PayStub> getAllIncome(DateTime start = new DateTime(), DateTime end = new DateTime())
         {
-            var stubs = App.Database.GetCollection<PayStub>("paystubs").FindAll();
-            return (stubs != null) ? stubs.ToList() : new List<PayStub>();
+            if (start.Year == 1 && end.Year == 1)
+            {
+                var stubs = App.Database.GetCollection<PayStub>("paystubs").FindAll();
+                return (stubs != null) ? stubs.ToList() : new List<PayStub>();
+            }
+            else if (start.Year == 1 && end.Year != 1)
+            {
+                return App.Database.GetCollection<PayStub>("paystubs").Find(
+                    (x) => (x.Date == start)
+                ).ToList();
+            }
+            else if (start.Year != 1 && end.Year == 1)
+            {
+                return App.Database.GetCollection<PayStub>("paystubs").Find(
+                    (x) => (x.Date == end)
+                ).ToList();
+            }
+            else
+            {
+                return App.Database.GetCollection<PayStub>("paystubs").Find(
+                    (x) => (x.Date >= start && x.Date <= end)
+                ).ToList();
+            }
+
         }
         public List<Settings> getSettings()
         {

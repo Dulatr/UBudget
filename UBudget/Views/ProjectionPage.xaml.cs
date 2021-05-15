@@ -78,29 +78,17 @@ namespace UBudget.Views
             Data.Axes.Add(categoryAxis);
             Data.Axes.Add(linearAxis);
 
-            var txs = App.Servicer.getAllTx(
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
-            );
-
-            var bills = txs?.FindAll(
-                (x) => x.Label == "Bills"
-            );
-
-            double _billAmount = 0.0;
-
-            foreach (Transaction bill in bills)
-            {
-                _billAmount += bill.Amount;
-            }
+            double _billAmount = getBillTotal();
+            double _incomeAmount = getRecentPaystubTotal();
+            double _accountTotal = getAccountsTotal();
 
             billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
-            billTotal.Items.Add(new ColumnItem(_billAmount * 2.0) { Color = OxyColors.Red });
-            billTotal.Items.Add(new ColumnItem(_billAmount * 3.0) { Color = OxyColors.Red });
+            billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
+            billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
 
-            accountTotal.Items.Add(new ColumnItem(getAccountsTotal()) { Color = OxyColors.ForestGreen });
-            accountTotal.Items.Add(new ColumnItem(getAccountsTotal() + getRecentPaystubTotal() * 2.0 - _billAmount) { Color = OxyColors.ForestGreen });
-            accountTotal.Items.Add(new ColumnItem(getAccountsTotal() + getRecentPaystubTotal() * 4.0 - _billAmount * 2.0) { Color = OxyColors.ForestGreen });
+            accountTotal.Items.Add(new ColumnItem(_accountTotal) { Color = OxyColors.ForestGreen });
+            accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * 2.0 - _billAmount) { Color = OxyColors.ForestGreen });
+            accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * 4.0 - _billAmount * 2.0) { Color = OxyColors.ForestGreen });
 
             accountTotal.IsStacked = true;
             billTotal.IsStacked = true;
@@ -125,13 +113,39 @@ namespace UBudget.Views
         }
         private double getRecentPaystubTotal()
         {
-            var stubs = App.Servicer.getAllIncome();
-            var lastStub = (stubs.Count != 0 ) ? stubs.Last() : null;
-            return (lastStub != null) ? lastStub.GrossAmount : 0.0;
+            double _stubTotal = 0.0;
+
+            var stubs = App.Servicer.getAllIncome(
+                new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
+                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
+            );
+
+            foreach (PayStub stub in stubs)
+            {
+                _stubTotal += stub.GrossAmount;
+            }
+
+            return _stubTotal;
         }
         private double getBillTotal()
         {
-            return App.Servicer.getAllTx().Last((x) => x.Label == "Bill").Amount;
+            double _billAmount = 0.0;
+
+            var txs = App.Servicer.getAllTx(
+                new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
+                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
+            );
+
+            var bills = txs?.FindAll(
+                (x) => x.Label == "Bills"
+            );
+
+            foreach (Transaction bill in bills)
+            {
+                _billAmount += bill.Amount;
+            }
+
+            return _billAmount;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
