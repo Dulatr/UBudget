@@ -22,13 +22,56 @@ namespace UBudget.DAO
         {
             return App.Database.GetCollection<Account>("accounts").FindAll().ToList();
         }
-        public List<Transaction> getAllTx()
+        public List<Transaction> getAllTx(DateTime start = new DateTime(), DateTime end = new DateTime())
         {
-            return App.Database.GetCollection<Transaction>("transactions").FindAll().ToList();
+            if (start.Year == 1 && end.Year == 1)
+                return App.Database.GetCollection<Transaction>("transactions").FindAll().ToList();
+            else if (start.Year == 1 && end.Year != 1)
+            {
+                return App.Database.GetCollection<Transaction>("transactions").Find(
+                    (x) => (x.DateTime == start)
+                ).ToList();
+            }
+            else if (start.Year != 1 && end.Year == 1)
+            {
+                return App.Database.GetCollection<Transaction>("transactions").Find(
+                    (x) => (x.DateTime == end)
+                ).ToList();
+            }
+            else
+            {
+                return App.Database.GetCollection<Transaction>("transactions").Find(
+                   (x) => (x.DateTime >= start && x.DateTime <= end)
+                ).ToList();
+            }
+
         }
-        public List<PayStub> getAllIncome()
+        public List<PayStub> getAllIncome(DateTime start = new DateTime(), DateTime end = new DateTime())
         {
-            return App.Database.GetCollection<PayStub>("paystubs").FindAll().ToList();
+            if (start.Year == 1 && end.Year == 1)
+            {
+                var stubs = App.Database.GetCollection<PayStub>("paystubs").FindAll();
+                return (stubs != null) ? stubs.ToList() : new List<PayStub>();
+            }
+            else if (start.Year == 1 && end.Year != 1)
+            {
+                return App.Database.GetCollection<PayStub>("paystubs").Find(
+                    (x) => (x.Date == start)
+                ).ToList();
+            }
+            else if (start.Year != 1 && end.Year == 1)
+            {
+                return App.Database.GetCollection<PayStub>("paystubs").Find(
+                    (x) => (x.Date == end)
+                ).ToList();
+            }
+            else
+            {
+                return App.Database.GetCollection<PayStub>("paystubs").Find(
+                    (x) => (x.Date >= start && x.Date <= end)
+                ).ToList();
+            }
+
         }
         public List<Settings> getSettings()
         {
