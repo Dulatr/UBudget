@@ -1,4 +1,4 @@
-# UBugdet 
+# UBudget 
 
 A small UWP application using `LiteDB` and `OxyPlot`.
 
