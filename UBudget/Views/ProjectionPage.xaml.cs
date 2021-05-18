@@ -28,16 +28,20 @@ namespace UBudget.Views
             get { return data; }
             set { data = value; OnPropertyChanged(nameof(Data)); }
         }
+        private ColumnSeries accountTotal = new ColumnSeries() { FillColor = OxyColors.ForestGreen };
+        private ColumnSeries billTotal = new ColumnSeries() { FillColor = OxyColors.Red };
+        private CategoryAxis categoryAxis = new CategoryAxis();
+        private LinearAxis linearAxis = new LinearAxis();
 
         public ProjectionPage()
         {
             this.InitializeComponent();
 
             Data = new PlotModel();   
-            var accountTotal = new ColumnSeries() { FillColor = OxyColors.ForestGreen };
-            var billTotal = new ColumnSeries() { FillColor = OxyColors.Red };
-            var categoryAxis = new CategoryAxis();
-            var linearAxis = new LinearAxis();
+            DateTime today = DateTime.Today;
+            double _billAmount = getBillTotal();
+            double _incomeAmount = getRecentPaystubTotal();
+            double _accountTotal = getAccountsTotal();
 
             #region Plot and Axis Settings
 
@@ -75,17 +79,14 @@ namespace UBudget.Views
 
             #endregion
 
-            DateTime today = DateTime.Today;
+            #region Initialize Plot Series
+
             categoryAxis.Labels.Add($"{today.Month}/{DateTime.DaysInMonth(today.Year, today.Month)}");
-            categoryAxis.Labels.Add($"{today.AddMonths(1).Month}/{DateTime.DaysInMonth(today.Year,today.AddMonths(1).Month)}");
+            categoryAxis.Labels.Add($"{today.AddMonths(1).Month}/{DateTime.DaysInMonth(today.Year, today.AddMonths(1).Month)}");
             categoryAxis.Labels.Add($"{today.AddMonths(2).Month}/{DateTime.DaysInMonth(today.Year, today.AddMonths(2).Month)}");
 
             Data.Axes.Add(categoryAxis);
             Data.Axes.Add(linearAxis);
-
-            double _billAmount = getBillTotal();
-            double _incomeAmount = getRecentPaystubTotal();
-            double _accountTotal = getAccountsTotal();
 
             billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
             billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
@@ -98,12 +99,50 @@ namespace UBudget.Views
             accountTotal.IsStacked = true;
             billTotal.IsStacked = true;
 
+            #endregion
+
             Data.Series.Add(accountTotal);
             Data.Series.Add(billTotal);
+
+            for(int i = 1; i <= 12; i++)
+            {
+                LengthOfTimeSelectionBox.Items.Add(i);
+            }
+
+            LengthOfTimeSelectionBox.SelectedIndex = 0;
+
+            PayFrequencySelectionBox.SelectedIndex = 0;
+            PayFrequencySelectionBox.SelectionChanged += PayFrequencySelectionBox_SelectionChanged;
 
             MainPage.setCommandsToPage(this);
         }
 
+        private void PayFrequencySelectionBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var frequency = ((PayFrequencySelectionBox.SelectedItem as ComboBoxItem).Content.ToString() == "Bi-weekly") ? 2.0 : 1.0;
+            UpdateSeries(frequency,LengthOfTimeSelectionBox.SelectedIndex + 1);
+        }
+
+        private void UpdateSeries(double frequency = 1.0, double length = 3.0)
+        {
+            double _billAmount = getBillTotal();
+            double _incomeAmount = getRecentPaystubTotal();
+            double _accountTotal = getAccountsTotal();           
+
+            accountTotal.Items.Clear();
+            billTotal.Items.Clear();
+
+            for (int i = 0; i < length; i++)
+            {
+                billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
+                accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * frequency * i - _billAmount * i) { Color = OxyColors.ForestGreen });
+            }
+
+            Data.InvalidatePlot(true);
+            Data.Series.Clear();
+            Data.Series.Add(accountTotal);
+            Data.Series.Add(billTotal);
+        }
         private double getAccountsTotal()
         {
             var accounts = App.Servicer.getAll();
