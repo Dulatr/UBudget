@@ -28,16 +28,23 @@ namespace UBudget.Views
             get { return data; }
             set { data = value; OnPropertyChanged(nameof(Data)); }
         }
+        private ColumnSeries accountTotal = new ColumnSeries() { FillColor = OxyColors.ForestGreen };
+        private ColumnSeries billTotal = new ColumnSeries() { FillColor = OxyColors.Red };
+        private CategoryAxis categoryAxis = new CategoryAxis();
+        private LinearAxis linearAxis = new LinearAxis();
+
+        private bool HasLoaded = false;
+        private readonly int[] months = new int[] { 3, 6, 12, 24 };
 
         public ProjectionPage()
         {
             this.InitializeComponent();
 
             Data = new PlotModel();   
-            var accountTotal = new ColumnSeries() { FillColor = OxyColors.ForestGreen };
-            var billTotal = new ColumnSeries() { FillColor = OxyColors.Red };
-            var categoryAxis = new CategoryAxis();
-            var linearAxis = new LinearAxis();
+            DateTime today = DateTime.Today;
+            double _billAmount = getBillTotal();
+            double _incomeAmount = getRecentPaystubTotal();
+            double _accountTotal = getAccountsTotal();
 
             #region Plot and Axis Settings
 
@@ -75,17 +82,14 @@ namespace UBudget.Views
 
             #endregion
 
-            DateTime today = DateTime.Today;
+            #region Initialize Plot Series
+
             categoryAxis.Labels.Add($"{today.Month}/{DateTime.DaysInMonth(today.Year, today.Month)}");
-            categoryAxis.Labels.Add($"{today.AddMonths(1).Month}/{DateTime.DaysInMonth(today.Year,today.AddMonths(1).Month)}");
+            categoryAxis.Labels.Add($"{today.AddMonths(1).Month}/{DateTime.DaysInMonth(today.Year, today.AddMonths(1).Month)}");
             categoryAxis.Labels.Add($"{today.AddMonths(2).Month}/{DateTime.DaysInMonth(today.Year, today.AddMonths(2).Month)}");
 
             Data.Axes.Add(categoryAxis);
             Data.Axes.Add(linearAxis);
-
-            double _billAmount = getBillTotal();
-            double _incomeAmount = getRecentPaystubTotal();
-            double _accountTotal = getAccountsTotal();
 
             billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
             billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
@@ -98,12 +102,61 @@ namespace UBudget.Views
             accountTotal.IsStacked = true;
             billTotal.IsStacked = true;
 
+            #endregion
+
             Data.Series.Add(accountTotal);
             Data.Series.Add(billTotal);
+
+            LengthOfTimeSelectionBox.SelectedIndex = 0;
+            LengthOfTimeSelectionBox.SelectionChanged += OptionsSelectionChanged;
+
+            PayFrequencySelectionBox.SelectedIndex = 0;
+            PayFrequencySelectionBox.SelectionChanged += OptionsSelectionChanged;
 
             MainPage.setCommandsToPage(this);
         }
 
+        private void OptionsSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (HasLoaded)
+            {
+                var frequency = ((PayFrequencySelectionBox.SelectedItem as ComboBoxItem).Content.ToString() == "Bi-weekly") ? 2.0 : 1.0;
+                UpdateSeries(frequency,(int)LengthOfTimeSelectionBox.SelectedItem);
+            }
+            HasLoaded = true;
+        }
+
+        private void UpdateSeries(double frequency = 1.0, double length = 3.0)
+        {
+            DateTime today = DateTime.Today;
+            double _billAmount = getBillTotal();
+            double _incomeAmount = getRecentPaystubTotal();
+            double _accountTotal = getAccountsTotal();           
+
+            accountTotal.Items.Clear();
+            billTotal.Items.Clear();
+            categoryAxis.Labels.Clear();
+
+            for (int i = 0; i < length; i++)
+            {
+                billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
+                accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * frequency * i - _billAmount * i) { Color = OxyColors.ForestGreen });
+            }
+
+            for (int i = 0; i < length; i++)
+            {
+                categoryAxis.Labels.Add($"{today.AddMonths(i).Month}/{DateTime.DaysInMonth(today.Year, today.AddMonths(i).Month)}");
+            }
+
+            Data.InvalidatePlot(true);
+            Data.Series.Clear();
+            Data.Axes.Clear();
+
+            Data.Axes.Add(categoryAxis);
+            Data.Axes.Add(linearAxis);
+            Data.Series.Add(accountTotal);
+            Data.Series.Add(billTotal);
+        }
         private double getAccountsTotal()
         {
             var accounts = App.Servicer.getAll();

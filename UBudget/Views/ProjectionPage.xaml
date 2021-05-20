@@ -11,6 +11,22 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <windows:PlotView x:Name="ProjectionsPlot" Model="{x:Bind Data}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        
+        <ComboBox x:Name="LengthOfTimeSelectionBox"
+                  HorizontalAlignment="Right"
+                  Width="150" ItemsSource="{x:Bind months,Mode=OneTime}"/>
+        <ComboBox x:Name="PayFrequencySelectionBox"
+                  HorizontalAlignment="Right" VerticalAlignment="Center"
+                  Width="150">
+            <ComboBoxItem>Bi-weekly</ComboBoxItem>
+            <ComboBoxItem>Monthly</ComboBoxItem>
+        </ComboBox>
+
+        <windows:PlotView x:Name="ProjectionsPlot" Model="{x:Bind Data}" 
+                          Grid.Row="1"/>
     </Grid>
 </Page>
