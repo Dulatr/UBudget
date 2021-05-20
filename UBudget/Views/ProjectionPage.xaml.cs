@@ -33,6 +33,9 @@ namespace UBudget.Views
         private CategoryAxis categoryAxis = new CategoryAxis();
         private LinearAxis linearAxis = new LinearAxis();
 
+        private bool HasLoaded = false;
+        private readonly int[] months = new int[] { 3, 6, 12, 24 };
+
         public ProjectionPage()
         {
             this.InitializeComponent();
@@ -104,33 +107,35 @@ namespace UBudget.Views
             Data.Series.Add(accountTotal);
             Data.Series.Add(billTotal);
 
-            for(int i = 1; i <= 12; i++)
-            {
-                LengthOfTimeSelectionBox.Items.Add(i);
-            }
-
             LengthOfTimeSelectionBox.SelectedIndex = 0;
+            LengthOfTimeSelectionBox.SelectionChanged += OptionsSelectionChanged;
 
             PayFrequencySelectionBox.SelectedIndex = 0;
-            PayFrequencySelectionBox.SelectionChanged += PayFrequencySelectionBox_SelectionChanged;
+            PayFrequencySelectionBox.SelectionChanged += OptionsSelectionChanged;
 
             MainPage.setCommandsToPage(this);
         }
 
-        private void PayFrequencySelectionBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OptionsSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var frequency = ((PayFrequencySelectionBox.SelectedItem as ComboBoxItem).Content.ToString() == "Bi-weekly") ? 2.0 : 1.0;
-            UpdateSeries(frequency,LengthOfTimeSelectionBox.SelectedIndex + 1);
+            if (HasLoaded)
+            {
+                var frequency = ((PayFrequencySelectionBox.SelectedItem as ComboBoxItem).Content.ToString() == "Bi-weekly") ? 2.0 : 1.0;
+                UpdateSeries(frequency,(int)LengthOfTimeSelectionBox.SelectedItem);
+            }
+            HasLoaded = true;
         }
 
         private void UpdateSeries(double frequency = 1.0, double length = 3.0)
         {
+            DateTime today = DateTime.Today;
             double _billAmount = getBillTotal();
             double _incomeAmount = getRecentPaystubTotal();
             double _accountTotal = getAccountsTotal();           
 
             accountTotal.Items.Clear();
             billTotal.Items.Clear();
+            categoryAxis.Labels.Clear();
 
             for (int i = 0; i < length; i++)
             {
@@ -138,8 +143,17 @@ namespace UBudget.Views
                 accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * frequency * i - _billAmount * i) { Color = OxyColors.ForestGreen });
             }
 
+            for (int i = 0; i < length; i++)
+            {
+                categoryAxis.Labels.Add($"{today.AddMonths(i).Month}/{DateTime.DaysInMonth(today.Year, today.AddMonths(i).Month)}");
+            }
+
             Data.InvalidatePlot(true);
             Data.Series.Clear();
+            Data.Axes.Clear();
+
+            Data.Axes.Add(categoryAxis);
+            Data.Axes.Add(linearAxis);
             Data.Series.Add(accountTotal);
             Data.Series.Add(billTotal);
         }
