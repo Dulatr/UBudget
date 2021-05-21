@@ -25,8 +25,10 @@ namespace UBudget.Views
         {
             this.InitializeComponent();
 
-            if (App.Servicer.getAll().Count != 0 && App.Servicer.getAll() != null)
-                DisplayAccount = App.Servicer.getAll().First();
+            foreach (Account account in App.Servicer.getAll())
+            {
+                Accounts.Add(account);
+            }
 
             App.Servicer.DataBaseAccountUpdate += BaseServicer_DataBaseUpdate;
 
@@ -34,19 +36,18 @@ namespace UBudget.Views
         }
 
         // Properties
-        private Account displayAccount;
-        public Account DisplayAccount
+        private ObservableCollection<Account> _accounts;
+        public ObservableCollection<Account> Accounts
         {
             get
             {
-                if (displayAccount == null)
-                    displayAccount = new Account();
-                return displayAccount;
+                if (_accounts == null)
+                    _accounts = new ObservableCollection<Account>();
+                return _accounts;
             }
             set
             {
-                displayAccount = value;
-                OnPropertyChanged(nameof(DisplayAccount));
+                _accounts = value;
             }
         }
 
@@ -62,7 +63,8 @@ namespace UBudget.Views
 
         private void BaseServicer_DataBaseUpdate(object sender, EventArgs e)
         {
-            DisplayAccount = (sender as Account);
+            var _account = Accounts.FirstOrDefault((x) => x.ID == (sender as Account).ID);
+            _account.Value = (sender as Account).Value;
         }
 
     }
