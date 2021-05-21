@@ -9,21 +9,52 @@
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        
+        <Viewbox Stretch="Uniform"
+                 Grid.Row="0">
+            <TextBlock Text="Accounts" HorizontalAlignment="Center" Padding="7"/>
+        </Viewbox>
 
-    <controls:AdaptiveGridView
-        ItemsSource="{x:Bind Accounts}"
-        ItemHeight="600"
-        DesiredWidth="600">
-        <controls:AdaptiveGridView.ItemTemplate>
-            <DataTemplate>
-                <Viewbox Stretch="Uniform">
-                    <StackPanel>
-                        <TextBlock Text="{Binding Name}" Padding="30" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding Value}" HorizontalAlignment="Center"/>
-                        <TextBlock Text="{Binding ID}" HorizontalAlignment="Center"/>
-                    </StackPanel>
-                </Viewbox>
-            </DataTemplate>
-        </controls:AdaptiveGridView.ItemTemplate>
-    </controls:AdaptiveGridView>
+        <controls:AdaptiveGridView
+            ItemsSource="{x:Bind Accounts}"
+            ItemHeight="600"
+            DesiredWidth="600"
+            Grid.Row="1">
+            <controls:AdaptiveGridView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="White" BorderThickness="1">
+                        <Viewbox>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                
+
+                                <Viewbox Stretch="Uniform" Grid.Row="0">
+                                    <TextBlock Text="{Binding Name}" Padding="30" HorizontalAlignment="Center"/>
+                                </Viewbox>
+                            
+                                <Viewbox Grid.Row="1" Stretch="Uniform">
+                                    <TextBlock Text="{Binding Value}" HorizontalAlignment="Center"/>                                
+                                </Viewbox>
+                            
+                                <Viewbox Grid.Row="2" Stretch="Uniform">
+                                    <TextBlock Text="{Binding ID}" HorizontalAlignment="Center"/>                                
+                                </Viewbox>
+
+                            </Grid>
+                        </Viewbox>
+                    </Border>
+                </DataTemplate>
+            </controls:AdaptiveGridView.ItemTemplate>
+        </controls:AdaptiveGridView>        
+    </Grid>
+
 </Page>
