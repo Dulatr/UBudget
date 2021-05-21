@@ -3,18 +3,27 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:UBudget.Views"
+    xmlns:models ="using:UBudget.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel>
-        <TextBlock Text="{x:Bind DisplayAccount.Name,Mode=TwoWay}"
-                   Height="40"
-                   HorizontalAlignment="Center"/>
-        <TextBlock Text="{x:Bind DisplayAccount.Value,Mode=TwoWay}"
-                   Height="33"
-                   Name="DisplayAccountBox"
-                   HorizontalAlignment="Center"/>
-    </StackPanel>
+    <controls:AdaptiveGridView
+        ItemsSource="{x:Bind Accounts}"
+        ItemHeight="600"
+        DesiredWidth="600">
+        <controls:AdaptiveGridView.ItemTemplate>
+            <DataTemplate>
+                <Viewbox Stretch="Uniform">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Name}" Padding="30" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding Value}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding ID}" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Viewbox>
+            </DataTemplate>
+        </controls:AdaptiveGridView.ItemTemplate>
+    </controls:AdaptiveGridView>
 </Page>
