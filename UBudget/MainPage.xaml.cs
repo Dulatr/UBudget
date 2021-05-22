@@ -26,7 +26,7 @@ namespace UBudget
     {
         // Properties
         private static List<string> IncomeButtons = new List<string>() { "AddIncomeCommandButton", "RemoveIncomeButton" };
-        private static List<string> TransactionButtons = new List<string>() { "AddButton","LabelButton","DeleteButton" };
+        private static List<string> TransactionButtons = new List<string>() { "AddButton","LabelButton","RmLabelButton","DeleteButton" };
         private static CommandBar commands;
         private static CommandBar Commands
         {

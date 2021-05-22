@@ -74,6 +74,8 @@
                             </ComboBox>
                             <Button x:Name="AddLabelButton"
                                     Content="Add"/>
+                            <Button x:Name="RmLabelButton"
+                                    Content="Remove"/>
                         </StackPanel>
                     </Flyout>
                 </AppBarButton.Flyout>

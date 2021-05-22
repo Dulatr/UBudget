@@ -42,6 +42,7 @@ namespace UBudget.Views
             MainPage.setFlyoutButtonClickEvent("AddAccountBtn", AddAccountBtn_Click);
             MainPage.setFlyoutButtonClickEvent("AddTxButton", AddTxButton_Click);
             MainPage.setFlyoutButtonClickEvent("AddLabelButton", AddLabelButton_Click);
+            MainPage.setFlyoutButtonClickEvent("RmLabelButton", RmLabelButton_Click);
             MainPage.setFlyoutButtonClickEvent("DeleteSelectedButton", DeleteSelectedButton_Click);
         }
 
@@ -64,6 +65,26 @@ namespace UBudget.Views
             {
                 txList.Add(tx);
             }
+        }
+
+        private void RmLabelButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Transactions.SelectedItem == null)
+            {
+                return;
+            }
+
+            var transaction = Transactions.SelectedItem as Transaction;
+            App.Servicer.rmLabel(
+                transaction.TxID
+            );
+
+            txList.Clear();
+            foreach (Transaction tx in App.Servicer.getAllTx().Where(x => x.AccountID == transaction.AccountID))
+            {
+                txList.Add(tx);
+            }
+            Transactions.SelectedItem = transaction;
         }
 
         private void AddTxButton_Click(object sender, RoutedEventArgs e)
