@@ -84,6 +84,7 @@ namespace UBudget.Views
             {
                 txList.Add(tx);
             }
+            Transactions.SelectedItem = transaction;
         }
 
         private void AddTxButton_Click(object sender, RoutedEventArgs e)
