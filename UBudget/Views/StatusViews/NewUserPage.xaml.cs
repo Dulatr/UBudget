@@ -27,7 +27,7 @@ namespace UBudget.Views.StatusViews
         {
             Frame mf = Window.Current.Content as Frame;
             MainPage mp = mf.Content as MainPage;
-            mp.MainFrame.Navigate(typeof(HomePage));
+            mp.MainFrame.Navigate(typeof(AccountCreationPage));
         }
     }
 }
