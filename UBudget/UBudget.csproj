@@ -141,6 +141,9 @@
     <Compile Include="Views\ProjectionPage.xaml.cs">
       <DependentUpon>ProjectionPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\StatusViews\NewUserPage.xaml.cs">
+      <DependentUpon>NewUserPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TaxPage.xaml.cs">
       <DependentUpon>TaxPage.xaml</DependentUpon>
     </Compile>
@@ -186,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProjectionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StatusViews\NewUserPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

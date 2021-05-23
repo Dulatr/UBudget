@@ -181,7 +181,8 @@
                 <NavigationViewItem x:Name="BudgetSelection" Content="Budget" Icon="List"></NavigationViewItem>
                 <NavigationViewItem x:Name="ProjectSelection" Content="Projection" Icon="PreviewLink"></NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame x:Name="MainFrame"/>
+            <Frame x:Name="MainFrame"
+                   x:FieldModifier="public"/>
         </NavigationView>        
     </Grid>
 
