@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace UBudget.Controls
@@ -13,7 +14,7 @@ namespace UBudget.Controls
     public class MoneyTextBox : TextBox
     {
         private readonly string numbers = "0123456789";
-        private readonly List<string> bannedStrings = new List<string>() { "Back", "Left", "Right" };
+        private readonly List<string> allowedStrings = new List<string>() {"Back", "Left", "Right" };
         private string keyString = "";
 
         public MoneyTextBox()
@@ -27,7 +28,7 @@ namespace UBudget.Controls
             keyString = e.Key.ToString();
             // number row keys show up as 'NumberN', numpad keys show up as 'NumberPadN'
             keyString = keyString.Replace("Number", "").Replace("Pad", "");
-            if (!numbers.Contains(keyString) && bannedStrings.Contains(keyString))
+            if (!numbers.Contains(keyString) && !allowedStrings.Contains(keyString))
             {
                 // don't do anything with the key that was pressed
                 e.Handled = true;
@@ -36,6 +37,15 @@ namespace UBudget.Controls
             // otherwise allow the keypress
             e.Handled = false;
             return;
+        }
+
+        protected override void OnLostFocus(RoutedEventArgs e)
+        {
+            base.OnLostFocus(e);
+            if (this.Text == "")
+            {
+                this.Text = "$0.00";
+            }
         }
 
         private void MoneyTextBox_TextChanged(object sender, TextChangedEventArgs e)
