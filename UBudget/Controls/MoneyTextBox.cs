@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Windows.UI.Xaml.Controls;
 
@@ -12,6 +13,7 @@ namespace UBudget.Controls
     public class MoneyTextBox : TextBox
     {
         private readonly string numbers = "0123456789";
+        private readonly List<string> bannedStrings = new List<string>() { "Back", "Left", "Right" };
         private string keyString = "";
 
         public MoneyTextBox()
@@ -25,7 +27,7 @@ namespace UBudget.Controls
             keyString = e.Key.ToString();
             // number row keys show up as 'NumberN', numpad keys show up as 'NumberPadN'
             keyString = keyString.Replace("Number", "").Replace("Pad", "");
-            if (!numbers.Contains(keyString) && keyString != "Back" && keyString != "Left" && keyString != "Right")
+            if (!numbers.Contains(keyString) && bannedStrings.Contains(keyString))
             {
                 // don't do anything with the key that was pressed
                 e.Handled = true;
