@@ -46,25 +46,37 @@ namespace UBudget.Controls
             return;
         }
 
-
         private void MoneyTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             // get the unformatted value: just the digits
             string value = Text.Replace(",", "").Replace("$", "").Replace(".", "").TrimStart('0');
+            var cursorStart = SelectionStart;
 
             // verify the stripped-down text is actually a number
             if (decimal.TryParse(value, out decimal centified))
             {
                 // divide by 100 to get a decimal value with cents
                 centified /= 100;
+                
                 // remove the events temporarily since we change the text here
                 TextChanged -= MoneyTextBox_TextChanged;
+
+                if (keyString == "Back")
+                {
+                    centified *= 10;
+                }
+
                 // convert it to US money format
                 Text = string.Format(CultureInfo.CreateSpecificCulture("en-US"), "{0:C2}", centified);
+                
                 // add the events back since we're done changing the text
                 TextChanged += MoneyTextBox_TextChanged;
-                // move cursor to end of text
-                Select(Text.Length, 0);
+
+                if (keyString == "Back")
+                    Select(cursorStart, 0);
+                else
+                    // move cursor to end of text
+                    Select(Text.Length, 0);
             }
             else
             {
