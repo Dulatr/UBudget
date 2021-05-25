@@ -34,6 +34,16 @@ namespace UBudget.Controls
                 e.Handled = true;
                 return;
             }
+
+           if (keyString == "Back")
+            {
+                if (this.Text.Length == 1)
+                {
+                    e.Handled = true;
+                    return;
+                }
+            }
+
             // otherwise allow the keypress
             e.Handled = false;
             return;

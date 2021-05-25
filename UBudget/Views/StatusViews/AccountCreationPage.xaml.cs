@@ -40,7 +40,7 @@ namespace UBudget.Views.StatusViews
             App.Servicer.addAccount(new Account()
             {
                 Name = AccountNameBx.Text,
-                Value = Double.Parse(AccountValueBx.Text)
+                Value = Double.Parse(AccountValueBx.Text.Replace("$",""))
             });
 
             // commented for testing currently
