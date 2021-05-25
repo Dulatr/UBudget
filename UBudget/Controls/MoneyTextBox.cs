@@ -14,7 +14,7 @@ namespace UBudget.Controls
     public class MoneyTextBox : TextBox
     {
         private readonly string numbers = "0123456789";
-        private readonly List<string> allowedStrings = new List<string>() {"Back", "Left", "Right" };
+        private readonly List<string> allowedStrings = new List<string>() { "Back", "Left", "Right" };
         private string keyString = "";
 
         public MoneyTextBox()
@@ -35,13 +35,10 @@ namespace UBudget.Controls
                 return;
             }
 
-           if (keyString == "Back")
+            if (this.Text.Length >= 14 && keyString != "Back")
             {
-                if (this.Text.Length == 1)
-                {
-                    e.Handled = true;
-                    return;
-                }
+                e.Handled = true;
+                return;
             }
 
             // otherwise allow the keypress
@@ -49,14 +46,6 @@ namespace UBudget.Controls
             return;
         }
 
-        protected override void OnLostFocus(RoutedEventArgs e)
-        {
-            base.OnLostFocus(e);
-            if (this.Text == "")
-            {
-                this.Text = "$0.00";
-            }
-        }
 
         private void MoneyTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -77,6 +66,19 @@ namespace UBudget.Controls
                 // move cursor to end of text
                 Select(Text.Length, 0);
             }
+            else
+            {
+                TextChanged -= MoneyTextBox_TextChanged;
+
+                if (this.Text != "")
+                    this.SelectedText = "0";
+                else
+                    this.Text = "$0.00";
+                Select(Text.Length, 0);
+
+                TextChanged += MoneyTextBox_TextChanged;
+            }
+            
         }
     }
 }
