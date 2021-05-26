@@ -14,7 +14,7 @@ namespace UBudget.Controls
     public class MoneyTextBox : TextBox
     {
         private readonly string numbers = "0123456789";
-        private readonly List<string> allowedStrings = new List<string>() {"Back", "Left", "Right" };
+        private readonly List<string> allowedStrings = new List<string>() { "Back", "Left", "Right" };
         private string keyString = "";
 
         public MoneyTextBox()
@@ -36,12 +36,18 @@ namespace UBudget.Controls
             }
 
            if (keyString == "Back")
-            {
+           {
                 if (this.Text.Length == 1)
                 {
                     e.Handled = true;
                     return;
                 }
+           }
+            
+           if (!allowedStrings.Contains(keyString) && this.Text.Length == 13)
+            {
+                e.Handled = true;
+                return;
             }
 
             // otherwise allow the keypress
@@ -62,23 +68,21 @@ namespace UBudget.Controls
                 
                 // remove the events temporarily since we change the text here
                 TextChanged -= MoneyTextBox_TextChanged;
+
                 // convert it to US money format
                 Text = string.Format(CultureInfo.CreateSpecificCulture("en-US"), "{0:C2}", centified);
                 
                 // add the events back since we're done changing the text
                 TextChanged += MoneyTextBox_TextChanged;
 
-                if (keyString == "Back")
-                    Select(cursorStart, 0);
-                else
-                    // move cursor to end of text
-                    Select(Text.Length, 0);
+                // move cursor to end of text
+                Select(Text.Length, 0);
             }
             else
             {
                 TextChanged -= MoneyTextBox_TextChanged;
 
-                if (this.Text != "")
+                if (this.Text != "" && keyString != "0")
                     this.SelectedText = "0";
                 else
                     this.Text = "$0.00";
