@@ -28,13 +28,15 @@ namespace UBudget.Views.StatusViews
 
         private void SubmitBttn_Click(object sender, RoutedEventArgs e)
         {
-            Frame mf = Window.Current.Content as Frame;
-            MainPage mp = mf.Content as MainPage;
-            mp.MainFrame.Navigate(typeof(HomePage));
 
             if (AccountValueBx.Text == "")
             {
                 AccountValueBx.Text = "0.00";
+            }
+
+            if (AccountNameBx.Text == "")
+            {
+                //Need to switch to using validation 
             }
 
             App.Servicer.addAccount(new Account()
@@ -44,7 +46,12 @@ namespace UBudget.Views.StatusViews
             });
 
             // commented for testing currently
-            //App.Servicer.updateUserSetting();
+            App.Servicer.updateUserSetting();
+
+            Frame mf = Window.Current.Content as Frame;
+            MainPage mp = mf.Content as MainPage;
+            mp.MainFrame.Navigate(typeof(HomePage));
+
         }
     }
 }

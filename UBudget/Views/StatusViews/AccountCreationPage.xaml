@@ -44,6 +44,7 @@
                 </TextBlock>
                 <TextBox x:Name="AccountNameBx"
                          Header="Account Name:"
+                         Text="My_Account"
                          Grid.Column="0" Grid.Row="3" 
                          Grid.RowSpan="2" Grid.ColumnSpan="3"
                          Margin="14"
