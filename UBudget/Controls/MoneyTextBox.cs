@@ -45,10 +45,10 @@ namespace UBudget.Controls
            }
             
            if (!allowedStrings.Contains(keyString) && this.Text.Length == 13)
-            {
+           {
                 e.Handled = true;
                 return;
-            }
+           }
 
             // otherwise allow the keypress
             e.Handled = false;
