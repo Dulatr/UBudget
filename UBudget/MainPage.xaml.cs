@@ -103,6 +103,11 @@ namespace UBudget
 
             if ((userSetting as UserSettings).newUser)
             {
+                //Make sure you can't navigate anywhere else until new user requirements met
+                this.AppNav.IsPaneVisible = false;
+                this.AppNav.IsPaneOpen = false;
+                this.AppNav.PaneDisplayMode = NavigationViewPaneDisplayMode.LeftMinimal;
+
                 //New users see initial navigation to new user page
                 this.MainFrame.Navigate(typeof(NewUserPage));
             }

@@ -50,6 +50,12 @@ namespace UBudget.Views.StatusViews
 
             Frame mf = Window.Current.Content as Frame;
             MainPage mp = mf.Content as MainPage;
+
+            // 're-enable' the navigation view
+            mp.AppNav.IsPaneOpen = true;
+            mp.AppNav.IsPaneVisible = true;
+            mp.AppNav.PaneDisplayMode = NavigationViewPaneDisplayMode.Auto;
+
             mp.MainFrame.Navigate(typeof(HomePage));
 
         }

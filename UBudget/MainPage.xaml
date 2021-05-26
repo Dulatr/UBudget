@@ -172,6 +172,7 @@
         </CommandBar>
         <NavigationView x:Name="AppNav"
                             PaneDisplayMode="Auto"
+                            x:FieldModifier="public"
                             Grid.Row="1">
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Name="HomeSelection" Content="Home" Icon="Home"></NavigationViewItem>
