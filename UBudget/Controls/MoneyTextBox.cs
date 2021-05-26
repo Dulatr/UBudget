@@ -14,7 +14,7 @@ namespace UBudget.Controls
     public class MoneyTextBox : TextBox
     {
         private readonly string numbers = "0123456789";
-        private readonly List<string> allowedStrings = new List<string>() { "Back", "Left", "Right" };
+        private readonly List<string> allowedStrings = new List<string>() {"Back", "Left", "Right" };
         private string keyString = "";
 
         public MoneyTextBox()
@@ -35,10 +35,13 @@ namespace UBudget.Controls
                 return;
             }
 
-            if (this.Text.Length >= 14 && keyString != "Back")
+           if (keyString == "Back")
             {
-                e.Handled = true;
-                return;
+                if (this.Text.Length == 1)
+                {
+                    e.Handled = true;
+                    return;
+                }
             }
 
             // otherwise allow the keypress
@@ -50,7 +53,6 @@ namespace UBudget.Controls
         {
             // get the unformatted value: just the digits
             string value = Text.Replace(",", "").Replace("$", "").Replace(".", "").TrimStart('0');
-            var cursorStart = SelectionStart;
 
             // verify the stripped-down text is actually a number
             if (decimal.TryParse(value, out decimal centified))
@@ -60,12 +62,6 @@ namespace UBudget.Controls
                 
                 // remove the events temporarily since we change the text here
                 TextChanged -= MoneyTextBox_TextChanged;
-
-                if (keyString == "Back")
-                {
-                    centified *= 10;
-                }
-
                 // convert it to US money format
                 Text = string.Format(CultureInfo.CreateSpecificCulture("en-US"), "{0:C2}", centified);
                 
@@ -90,7 +86,6 @@ namespace UBudget.Controls
 
                 TextChanged += MoneyTextBox_TextChanged;
             }
-            
         }
     }
 }
