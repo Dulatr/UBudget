@@ -58,6 +58,7 @@ namespace UBudget.Views
             }
 
             MainPage.setCommandsToPage(this);
+            MainPage.setFlyoutButtonClickEvent("AddCategoryFlyoutButton", AddCategory);
             MainPage.setFlyoutButtonClickEvent("AddColorButton",OnButtonClick);
         }
 
@@ -65,6 +66,19 @@ namespace UBudget.Views
         {
             base.OnNavigatedFrom(e);
             MainPage.removeFlyoutClickEvent("AddColorButton", OnButtonClick);
+            MainPage.removeCommandClickEvent("AddCategoryFlyoutButton", AddCategory);
+        }
+
+        private void AddCategory(object sender, RoutedEventArgs e)
+        {
+            //This needs to be editing a data binding, and stored in the database so you don't lose the 
+            //created categories
+            var textbox = MainPage.FlyoutTextBoxInputs.Find((x) => x.Name == "AddCategoryTextBox");
+            var combobox = MainPage.FlyoutComboBoxInputs.Find((x) => x.Name == "LabelsBox");
+            if (textbox.Text != "")
+            {
+                combobox.Items.Add(textbox.Text);
+            }
         }
 
         private void OnButtonClick(object sender,RoutedEventArgs e)

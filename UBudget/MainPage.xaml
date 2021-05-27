@@ -132,8 +132,21 @@
             <AppBarButton x:Name="RemoveIncomeButton"
                           Label="Remove"
                           Icon="Remove"/>
+            <AppBarButton x:Name="AddCategory"
+                          AllowFocusOnInteraction="True"
+                          Icon="Add">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <StackPanel x:Name="AddCategoryFlyout">
+                            <TextBox x:Name="AddCategoryTextBox"/>
+                            <Button x:Name="AddCategoryFlyoutButton"
+                                    Content="Add"/>
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
             <AppBarButton x:Name="AddCategoryColor"
-                          Icon="Add"
+                          Icon="Edit"
                           AllowFocusOnInteraction="True">
                 <AppBarButton.Flyout>
                     <Flyout>

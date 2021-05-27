@@ -125,6 +125,7 @@ namespace UBudget
             flyoutPanels.Add(DeleteButtonFlyoutPanel);
             flyoutPanels.Add(AddIncomeCommandFlyoutPanel);
             flyoutPanels.Add(AddCategoryColorFlyout);
+            flyoutPanels.Add(AddCategoryFlyout);
 
             foreach (StackPanel panel in flyoutPanels)
             {
@@ -192,7 +193,7 @@ namespace UBudget
             }
             else if (page is BudgetPage)
             {
-                UpdateCommands(new List<string>() { "AddCategoryColor" });
+                UpdateCommands(new List<string>() { "AddCategoryColor", "AddCategory" });
             }
             else if (page is ProjectionPage)
             {
