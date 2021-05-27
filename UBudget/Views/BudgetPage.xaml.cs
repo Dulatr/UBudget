@@ -57,7 +57,6 @@ namespace UBudget.Views
                     settingFor.Brush = toColor(setting.categoryColor);
             }
 
-
             MainPage.setCommandsToPage(this);
             MainPage.setFlyoutButtonClickEvent("AddColorButton",OnButtonClick);
         }
