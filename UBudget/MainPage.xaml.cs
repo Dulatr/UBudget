@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using UBudget.Views;
+using UBudget.Views.StatusViews;
 using UBudget.Models;
 using System.ComponentModel;
 
@@ -97,7 +98,23 @@ namespace UBudget
             this.InitializeComponent();
 
             this.AppNav.ItemInvoked += AppNav_ItemInvoked;
-            this.MainFrame.Navigate(typeof(HomePage));
+
+            var userSetting = App.Servicer.getSettings("userSettings").FirstOrDefault((x) => x.categoryName == "User");
+
+            if ((userSetting as UserSettings).newUser)
+            {
+                //Make sure you can't navigate anywhere else until new user requirements met
+                this.AppNav.IsPaneVisible = false;
+                this.AppNav.IsPaneOpen = false;
+                this.AppNav.PaneDisplayMode = NavigationViewPaneDisplayMode.LeftMinimal;
+
+                //New users see initial navigation to new user page
+                this.MainFrame.Navigate(typeof(NewUserPage));
+            }
+            else
+            {
+                this.MainFrame.Navigate(typeof(HomePage));
+            }
 
             Commands = MainCommandBar;
 

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UBudget.DAO;
+using UBudget.Models;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -73,6 +74,9 @@ namespace UBudget
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
+
+            // Initialize User settings for application
+            Servicer.addSetting(new UserSettings());
         }
 
         /// <summary>

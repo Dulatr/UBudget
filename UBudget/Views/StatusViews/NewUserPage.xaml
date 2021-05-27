@@ -1,0 +1,54 @@
+﻿<Page
+    x:Class="UBudget.Views.StatusViews.NewUserPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UBudget.Views.StatusViews"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource SystemControlBackgroundBaseLowBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Viewbox Grid.Row="1" Grid.RowSpan="1"
+                 Grid.Column="1" Grid.ColumnSpan="4"
+                 Stretch="Uniform"
+                 HorizontalAlignment="Center">
+            <TextBlock Text="Welcome!" Style="{ThemeResource HeaderTextBlockStyle}"/>
+        </Viewbox>
+        <Viewbox Grid.Row="3" Grid.RowSpan="2"
+                 Grid.Column="1" Grid.ColumnSpan="4"
+                 Stretch="Uniform"
+                 HorizontalAlignment="Center"
+                 Margin="0 30 0 0">
+            <TextBlock TextAlignment="Center" Style="{ThemeResource SubheaderTextBlockStyle}">
+                Let's get started by adding<LineBreak/>
+                your first account!
+            </TextBlock>
+        </Viewbox>
+
+        <Viewbox Grid.Row="5" Grid.Column="5"
+                 Stretch="UniformToFill"
+                 Margin="30"
+                 VerticalAlignment="Center">
+            <Button x:Name="NavigateToCreateAccountPageBtn"
+                 Content="Next"/>            
+        </Viewbox>
+
+    </Grid>
+</Page>

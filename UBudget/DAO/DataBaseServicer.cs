@@ -73,9 +73,12 @@ namespace UBudget.DAO
             }
 
         }
-        public List<Settings> getSettings()
+        public List<Settings> getSettings(string name = "categoryColorSettings")
         {
-            return App.Database.GetCollection<Settings>("categoryColorSettings").FindAll().ToList();
+            if (name != "userSettings" && name != "categoryColorSettings")
+                return new List<Settings>();
+
+            return App.Database.GetCollection<Settings>(name).FindAll().ToList();
         }
         public Account getAccountById(int ID)
         {
@@ -199,13 +202,39 @@ namespace UBudget.DAO
             {
                 return;
             }
-            App.Database.GetCollection<Settings>("categoryColorSettings").Insert(setting);
+            if (setting is UserSettings)
+            {
+                if (getSettings("userSettings").Count == 0)
+                    App.Database.GetCollection<Settings>("userSettings").Insert(setting);
+                else if (getSettings("userSettings").Contains(setting) == true)
+                {
+                    return;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+                App.Database.GetCollection<Settings>("categoryColorSettings").Insert(setting);
         }
         public void updateSetting(string name, string color)
-        {
+        {        
             var setting = getSettings().First((x) => x.categoryName == name);
             setting.categoryColor = color;
             App.Database.GetCollection<Settings>("categoryColorSettings").Update(setting);
+        }
+        public void updateUserSetting()
+        {
+            var _userSettings = getSettings("userSettings");
+
+            if (_userSettings.Count == 0)
+            {
+                throw new Exception("No user setting found for sessions");
+            }
+
+            (_userSettings.First() as UserSettings).newUser = false;
+            App.Database.GetCollection<Settings>("userSettings").Update(_userSettings.First());
         }
     }
 

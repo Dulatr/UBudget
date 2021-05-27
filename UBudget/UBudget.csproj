@@ -119,6 +119,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MoneyTextBox.cs" />
     <Compile Include="DAO\DataBaseServicer.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -140,6 +141,12 @@
     </Compile>
     <Compile Include="Views\ProjectionPage.xaml.cs">
       <DependentUpon>ProjectionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StatusViews\AccountCreationPage.xaml.cs">
+      <DependentUpon>AccountCreationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StatusViews\NewUserPage.xaml.cs">
+      <DependentUpon>NewUserPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TaxPage.xaml.cs">
       <DependentUpon>TaxPage.xaml</DependentUpon>
@@ -186,6 +193,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProjectionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StatusViews\AccountCreationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StatusViews\NewUserPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

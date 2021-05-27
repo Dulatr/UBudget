@@ -15,4 +15,15 @@ namespace UBudget.Models
         public string categoryName { get; set; }
         public string categoryColor { get; set; }
     }
+
+    public class UserSettings : Settings
+    {
+        public UserSettings()
+        {
+            categoryName = "User";
+            categoryColor = "";
+            newUser = true;
+        }
+        public bool newUser { get; set; }
+    }
 }
