@@ -91,7 +91,21 @@ namespace UBudget
             }
 
         }
-        
+        private List<BudgetCategory> budgetCategories;
+        public List<BudgetCategory> BudgetCategories
+        {
+            get
+            {
+                if (budgetCategories == null)
+                    budgetCategories = new List<BudgetCategory>();
+                return budgetCategories;
+            }
+            set
+            {
+                budgetCategories = value;
+            }
+        }
+
         // Constructor
         public MainPage()
         {
@@ -139,6 +153,10 @@ namespace UBudget
                         FlyoutComboBoxInputs.Add(child as ComboBox);
                 }
             }
+
+            BudgetCategories.Add(new BudgetCategory() { Name = "Food" });
+            BudgetCategories.Add(new BudgetCategory() { Name = "Misc." });
+            BudgetCategories.Add(new BudgetCategory() { Name = "Bills" });
 
             setCommandsToPage(this);
         }

@@ -56,7 +56,7 @@ namespace UBudget.Views
             var transaction = Transactions.SelectedItem as Transaction;
             var found = (MainPage.FlyoutComboBoxInputs.First(x => x.Name == "LabelsBox").SelectedItem);
             App.Servicer.addLabel(
-                (MainPage.FlyoutComboBoxInputs.First(x=>x.Name == "LabelsBox").SelectedItem as ComboBoxItem).Content.ToString(),
+                (MainPage.FlyoutComboBoxInputs.First(x=>x.Name == "LabelsBox").SelectedItem as BudgetCategory).Name,
                 transaction.TxID
             );
 

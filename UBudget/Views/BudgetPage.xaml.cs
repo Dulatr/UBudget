@@ -71,14 +71,11 @@ namespace UBudget.Views
 
         private void AddCategory(object sender, RoutedEventArgs e)
         {
-            //This needs to be editing a data binding, and stored in the database so you don't lose the 
-            //created categories
-            var textbox = MainPage.FlyoutTextBoxInputs.Find((x) => x.Name == "AddCategoryTextBox");
-            var combobox = MainPage.FlyoutComboBoxInputs.Find((x) => x.Name == "LabelsBox");
-            if (textbox.Text != "")
-            {
-                combobox.Items.Add(textbox.Text);
-            }
+            Frame mf = Window.Current.Content as Frame;
+            MainPage mp = mf.Content as MainPage;
+            mp.BudgetCategories.Add( new BudgetCategory() {
+                Name = MainPage.FlyoutTextBoxInputs.Find((x) => x.Name == "AddCategoryTextBox").Text 
+            });
         }
 
         private void OnButtonClick(object sender,RoutedEventArgs e)

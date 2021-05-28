@@ -67,10 +67,13 @@
                         <StackPanel x:Name="LabelButtonFlyoutPanel">
                             <TextBlock>Add a label to selected transaction</TextBlock>
                             <ComboBox x:Name="LabelsBox"
-                                      SelectedIndex="0">
-                                <ComboBoxItem>Food</ComboBoxItem>
-                                <ComboBoxItem>Bills</ComboBoxItem>
-                                <ComboBoxItem>Misc.</ComboBoxItem>
+                                      SelectedIndex="0" 
+                                      ItemsSource="{x:Bind BudgetCategories,Mode=TwoWay}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
                             </ComboBox>
                             <Button x:Name="AddLabelButton"
                                     Content="Add"/>
