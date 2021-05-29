@@ -11,6 +11,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <controls:AdaptiveGridView x:Name="Categories" ItemsSource="{x:Bind categories}"
+                               IsRightTapEnabled="True" SelectionMode="Single"
                                DesiredWidth="140">
         <controls:AdaptiveGridView.ItemTemplate>
             <DataTemplate>

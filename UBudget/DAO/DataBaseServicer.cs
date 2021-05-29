@@ -95,6 +95,12 @@ namespace UBudget.DAO
             return App.Database.GetCollection<BudgetCategory>("BudgetCategories").FindAll().ToList<BudgetCategory>();
         }
 
+        // Logic Checks
+        public bool categoryExists(string name)
+        {
+            return App.Database.GetCollection<BudgetCategory>("BudgetCategories").Exists((x) => x.Name == name);
+        }
+
         // Make Changes To Documents
         public void addAccount(Account acc)
         {
@@ -169,6 +175,17 @@ namespace UBudget.DAO
                     Name = name,
                 });
             }
+        }
+        public void rmCategory(string name)
+        {
+            //Because if lazy, then do this
+            var category = getAllBudgetCategories().Find((x) => x.Name == name);
+            App.Database.GetCollection<BudgetCategory>("BudgetCategories").Delete(category.ID);
+        }
+        public void rmCategory(BudgetCategory category)
+        {
+            //If even lazier, which i am, then i do this
+            App.Database.GetCollection<BudgetCategory>("BudgetCategories").Delete(category.ID);
         }
         public void addIncome(PayStub payStub)
         {

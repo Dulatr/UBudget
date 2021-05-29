@@ -66,7 +66,7 @@
                     <Flyout>
                         <StackPanel x:Name="LabelButtonFlyoutPanel">
                             <TextBlock>Add a label to selected transaction</TextBlock>
-                            <ComboBox x:Name="LabelsBox"
+                            <ComboBox x:Name="LabelsBox" x:FieldModifier="public"
                                       SelectedIndex="0" 
                                       ItemsSource="{x:Bind BudgetCategories,Mode=TwoWay}">
                                 <ComboBox.ItemTemplate>

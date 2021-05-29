@@ -22,6 +22,9 @@ namespace UBudget.Views
     public sealed partial class BudgetPage : Page
     {
         private ObservableCollection<BudgetCategory> categories = new ObservableCollection<BudgetCategory>();
+        private MenuFlyout flyout = new MenuFlyout();
+        private MenuFlyoutItem flyoutSelection = new MenuFlyoutItem() { Text = "Delete" };
+        private BudgetCategory selected_category;
 
         public BudgetPage()
         {
@@ -48,7 +51,7 @@ namespace UBudget.Views
                         category.Amount += tx.Amount;
                     }
                 }                
-            }
+            }       
 
             foreach (Settings setting in App.Servicer.getSettings())
             {
@@ -57,9 +60,46 @@ namespace UBudget.Views
                     settingFor.Brush = toColor(setting.categoryColor);
             }
 
+            flyout.Items.Add(flyoutSelection);
+            flyoutSelection.Click += (sender,e) => {
+                Delete_Selected();
+            };
+
+            Categories.RightTapped += Categories_RightTapped;
+
             MainPage.setCommandsToPage(this);
             MainPage.setFlyoutButtonClickEvent("AddCategoryFlyoutButton", AddCategory);
             MainPage.setFlyoutButtonClickEvent("AddColorButton",OnButtonClick);
+        }
+
+        private void Categories_RightTapped(object sender, RightTappedRoutedEventArgs e)
+        {
+            this.flyout.ShowAt(sender as UIElement, e.GetPosition(sender as UIElement));
+
+            selected_category = (e.OriginalSource as FrameworkElement).DataContext as BudgetCategory;
+        }
+
+        private void Delete_Selected()
+        {
+            if (selected_category == null)
+                return;
+
+            categories.Remove(selected_category);
+            App.Servicer.rmCategory(selected_category.Name);
+
+            // need to search for all the transactions and clear their labels
+            foreach (Transaction tx in App.Servicer.getAllTx())
+            {
+                if (tx.Label == selected_category.Name)
+                {
+                    App.Servicer.rmLabel(tx.TxID);
+                }
+            }
+
+            Frame mf = Window.Current.Content as Frame;
+            MainPage mp = mf.Content as MainPage;
+            mp.BudgetCategories.Remove(mp.BudgetCategories.First((x) => x.Name == selected_category.Name));
+            mp.LabelsBox.SelectedIndex = 0;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -73,15 +113,21 @@ namespace UBudget.Views
         {
             Frame mf = Window.Current.Content as Frame;
             MainPage mp = mf.Content as MainPage;
+
             string name = MainPage.FlyoutTextBoxInputs.Find((x) => x.Name == "AddCategoryTextBox").Text;
+            
+            if (App.Servicer.categoryExists(name))
+            {
+                return;
+            }
 
             App.Servicer.addCategory(name);
 
+            // Pull from the servicer so you make sure you're referencing what you just added
             var addedCategory = App.Servicer.getAllBudgetCategories().Last();
 
+            // If the property is not an observable collection, very very bad things happen Q.Q
             mp.BudgetCategories.Add(addedCategory);
-
-            categories.Add(addedCategory);
 
         }
 
@@ -126,5 +172,6 @@ namespace UBudget.Views
             }
             return chosenColor;
         }
+
     }
 }

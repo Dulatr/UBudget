@@ -55,8 +55,13 @@ namespace UBudget.Views
 
             var transaction = Transactions.SelectedItem as Transaction;
             var found = (MainPage.FlyoutComboBoxInputs.First(x => x.Name == "LabelsBox").SelectedItem);
+            if (found == null)
+            {
+                return;
+            }
+            
             App.Servicer.addLabel(
-                (MainPage.FlyoutComboBoxInputs.First(x=>x.Name == "LabelsBox").SelectedItem as BudgetCategory).Name,
+                (found as BudgetCategory).Name,
                 transaction.TxID
             );
 
@@ -218,6 +223,7 @@ namespace UBudget.Views
             MainPage.removeFlyoutClickEvent("AddAccountBtn", AddAccountBtn_Click);
             MainPage.removeFlyoutClickEvent("AddTxButton", AddTxButton_Click);
             MainPage.removeFlyoutClickEvent("AddLabelButton", AddLabelButton_Click);
+            MainPage.removeFlyoutClickEvent("RmLabelButton", RmLabelButton_Click);
             MainPage.removeFlyoutClickEvent("DeleteSelectedButton", DeleteSelectedButton_Click);
         }
 	}

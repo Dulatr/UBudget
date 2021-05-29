@@ -18,7 +18,7 @@ using UBudget.Views;
 using UBudget.Views.StatusViews;
 using UBudget.Models;
 using System.ComponentModel;
-
+using System.Collections.ObjectModel;
 
 namespace UBudget
 {
@@ -91,13 +91,13 @@ namespace UBudget
             }
 
         }
-        private List<BudgetCategory> budgetCategories;
-        public List<BudgetCategory> BudgetCategories
+        private ObservableCollection<BudgetCategory> budgetCategories;
+        public ObservableCollection<BudgetCategory> BudgetCategories
         {
             get
             {
                 if (budgetCategories == null)
-                    budgetCategories = new List<BudgetCategory>();
+                    budgetCategories = new ObservableCollection<BudgetCategory>();
                 return budgetCategories;
             }
             set
@@ -153,10 +153,6 @@ namespace UBudget
                         FlyoutComboBoxInputs.Add(child as ComboBox);
                 }
             }
-
-            BudgetCategories.Add(new BudgetCategory() { Name = "Food" });
-            BudgetCategories.Add(new BudgetCategory() { Name = "Misc." });
-            BudgetCategories.Add(new BudgetCategory() { Name = "Bills" });
 
             foreach (BudgetCategory category in App.Servicer.getAllBudgetCategories())
             {
