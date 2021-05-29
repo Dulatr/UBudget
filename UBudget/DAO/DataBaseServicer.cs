@@ -90,6 +90,10 @@ namespace UBudget.DAO
             var collection = App.Database.GetCollection<Account>("accounts");
             return collection.FindOne(x => x.Name == name);
         }
+        public List<BudgetCategory> getAllBudgetCategories()
+        {
+            return App.Database.GetCollection<BudgetCategory>("BudgetCategories").FindAll().ToList<BudgetCategory>();
+        }
 
         // Make Changes To Documents
         public void addAccount(Account acc)
@@ -156,6 +160,15 @@ namespace UBudget.DAO
             transaction.Label = "";
 
             colllection.Update(transaction);
+        }
+        public void addCategory(string name)
+        {
+            if (name != "")
+            {
+                App.Database.GetCollection<BudgetCategory>("BudgetCategories").Insert(new BudgetCategory() {
+                    Name = name,
+                });
+            }
         }
         public void addIncome(PayStub payStub)
         {

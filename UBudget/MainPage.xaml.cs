@@ -158,6 +158,11 @@ namespace UBudget
             BudgetCategories.Add(new BudgetCategory() { Name = "Misc." });
             BudgetCategories.Add(new BudgetCategory() { Name = "Bills" });
 
+            foreach (BudgetCategory category in App.Servicer.getAllBudgetCategories())
+            {
+                BudgetCategories.Add(category);
+            }
+
             setCommandsToPage(this);
         }
         

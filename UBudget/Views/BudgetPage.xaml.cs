@@ -73,9 +73,16 @@ namespace UBudget.Views
         {
             Frame mf = Window.Current.Content as Frame;
             MainPage mp = mf.Content as MainPage;
-            mp.BudgetCategories.Add( new BudgetCategory() {
-                Name = MainPage.FlyoutTextBoxInputs.Find((x) => x.Name == "AddCategoryTextBox").Text 
-            });
+            string name = MainPage.FlyoutTextBoxInputs.Find((x) => x.Name == "AddCategoryTextBox").Text;
+
+            App.Servicer.addCategory(name);
+
+            var addedCategory = App.Servicer.getAllBudgetCategories().Last();
+
+            mp.BudgetCategories.Add(addedCategory);
+
+            categories.Add(addedCategory);
+
         }
 
         private void OnButtonClick(object sender,RoutedEventArgs e)
