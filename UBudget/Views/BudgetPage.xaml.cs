@@ -9,6 +9,7 @@ using UBudget.DAO;
 using UBudget.Models;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -23,6 +24,7 @@ namespace UBudget.Views
     {
         private ObservableCollection<BudgetCategory> categories = new ObservableCollection<BudgetCategory>();
         private MenuFlyout flyout = new MenuFlyout();
+        private ContentDialog status = new ContentDialog() { Title = "Category Creation Status", CloseButtonText = "Ok" };
         private MenuFlyoutItem flyoutSelection = new MenuFlyoutItem() { Text = "Delete" };
         private BudgetCategory selected_category;
 
@@ -62,13 +64,13 @@ namespace UBudget.Views
 
             flyout.Items.Add(flyoutSelection);
             flyoutSelection.Click += (sender,e) => {
-                Delete_Selected();
+                Delete_SelectedAsync();
             };
 
             Categories.RightTapped += Categories_RightTapped;
 
             MainPage.setCommandsToPage(this);
-            MainPage.setFlyoutButtonClickEvent("AddCategoryFlyoutButton", AddCategory);
+            MainPage.setFlyoutButtonClickEvent("AddCategoryFlyoutButton", AddCategoryAsync);
             MainPage.setFlyoutButtonClickEvent("AddColorButton",OnButtonClick);
         }
 
@@ -79,7 +81,7 @@ namespace UBudget.Views
             selected_category = (e.OriginalSource as FrameworkElement).DataContext as BudgetCategory;
         }
 
-        private void Delete_Selected()
+        private async void Delete_SelectedAsync()
         {
             if (selected_category == null)
                 return;
@@ -100,16 +102,18 @@ namespace UBudget.Views
             MainPage mp = mf.Content as MainPage;
             mp.BudgetCategories.Remove(mp.BudgetCategories.First((x) => x.Name == selected_category.Name));
             mp.LabelsBox.SelectedIndex = 0;
+            status.Content = $"Category: {selected_category.Name}, has been succesfully deleted!";
+            await status.ShowAsync();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
             MainPage.removeFlyoutClickEvent("AddColorButton", OnButtonClick);
-            MainPage.removeCommandClickEvent("AddCategoryFlyoutButton", AddCategory);
+            MainPage.removeCommandClickEvent("AddCategoryFlyoutButton", AddCategoryAsync);
         }
 
-        private void AddCategory(object sender, RoutedEventArgs e)
+        private async void AddCategoryAsync(object sender, RoutedEventArgs e)
         {
             Frame mf = Window.Current.Content as Frame;
             MainPage mp = mf.Content as MainPage;
@@ -118,6 +122,8 @@ namespace UBudget.Views
             
             if (App.Servicer.categoryExists(name))
             {
+                status.Content = $"A category already exists with the name: {name}.";
+                await status.ShowAsync();
                 return;
             }
 
@@ -128,7 +134,11 @@ namespace UBudget.Views
 
             // If the property is not an observable collection, very very bad things happen Q.Q
             mp.BudgetCategories.Add(addedCategory);
-
+            status.Content = $"`{name.ToUpper()}` successfully added as a category!\n\n" +
+                            "This page won't display the new category until you start labeling transactions.\n" +
+                            "After labeling a couple transactions can then come back here to see your tracked\n" +
+                            "totals.";
+            await status.ShowAsync();
         }
 
         private void OnButtonClick(object sender,RoutedEventArgs e)
