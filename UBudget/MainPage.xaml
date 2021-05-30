@@ -66,11 +66,14 @@
                     <Flyout>
                         <StackPanel x:Name="LabelButtonFlyoutPanel">
                             <TextBlock>Add a label to selected transaction</TextBlock>
-                            <ComboBox x:Name="LabelsBox"
-                                      SelectedIndex="0">
-                                <ComboBoxItem>Food</ComboBoxItem>
-                                <ComboBoxItem>Bills</ComboBoxItem>
-                                <ComboBoxItem>Misc.</ComboBoxItem>
+                            <ComboBox x:Name="LabelsBox" x:FieldModifier="public"
+                                      SelectedIndex="0" 
+                                      ItemsSource="{x:Bind BudgetCategories,Mode=TwoWay}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
                             </ComboBox>
                             <Button x:Name="AddLabelButton"
                                     Content="Add"/>
@@ -132,8 +135,21 @@
             <AppBarButton x:Name="RemoveIncomeButton"
                           Label="Remove"
                           Icon="Remove"/>
+            <AppBarButton x:Name="AddCategory"
+                          AllowFocusOnInteraction="True"
+                          Icon="Add">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <StackPanel x:Name="AddCategoryFlyout">
+                            <TextBox x:Name="AddCategoryTextBox"/>
+                            <Button x:Name="AddCategoryFlyoutButton"
+                                    Content="Add"/>
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
             <AppBarButton x:Name="AddCategoryColor"
-                          Icon="Add"
+                          Icon="Edit"
                           AllowFocusOnInteraction="True">
                 <AppBarButton.Flyout>
                     <Flyout>

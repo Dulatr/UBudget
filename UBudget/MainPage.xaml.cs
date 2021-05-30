@@ -18,7 +18,7 @@ using UBudget.Views;
 using UBudget.Views.StatusViews;
 using UBudget.Models;
 using System.ComponentModel;
-
+using System.Collections.ObjectModel;
 
 namespace UBudget
 {
@@ -91,7 +91,21 @@ namespace UBudget
             }
 
         }
-        
+        private ObservableCollection<BudgetCategory> budgetCategories;
+        public ObservableCollection<BudgetCategory> BudgetCategories
+        {
+            get
+            {
+                if (budgetCategories == null)
+                    budgetCategories = new ObservableCollection<BudgetCategory>();
+                return budgetCategories;
+            }
+            set
+            {
+                budgetCategories = value;
+            }
+        }
+
         // Constructor
         public MainPage()
         {
@@ -125,6 +139,7 @@ namespace UBudget
             flyoutPanels.Add(DeleteButtonFlyoutPanel);
             flyoutPanels.Add(AddIncomeCommandFlyoutPanel);
             flyoutPanels.Add(AddCategoryColorFlyout);
+            flyoutPanels.Add(AddCategoryFlyout);
 
             foreach (StackPanel panel in flyoutPanels)
             {
@@ -137,6 +152,11 @@ namespace UBudget
                     else if (child is ComboBox)
                         FlyoutComboBoxInputs.Add(child as ComboBox);
                 }
+            }
+
+            foreach (BudgetCategory category in App.Servicer.getAllBudgetCategories())
+            {
+                BudgetCategories.Add(category);
             }
 
             setCommandsToPage(this);
@@ -192,7 +212,7 @@ namespace UBudget
             }
             else if (page is BudgetPage)
             {
-                UpdateCommands(new List<string>() { "AddCategoryColor" });
+                UpdateCommands(new List<string>() { "AddCategoryColor", "AddCategory" });
             }
             else if (page is ProjectionPage)
             {
