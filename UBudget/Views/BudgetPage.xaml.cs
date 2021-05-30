@@ -134,9 +134,9 @@ namespace UBudget.Views
 
             // If the property is not an observable collection, very very bad things happen Q.Q
             mp.BudgetCategories.Add(addedCategory);
-            status.Content = $"`{name.ToUpper()}` successfully added as a category!\n\n" +
-                            "This page won't display the new category until you start labeling transactions.\n" +
-                            "After labeling a couple transactions can then come back here to see your tracked\n" +
+            status.Content = $"`{name.ToUpper()}` successfully added as a category!\n\n".Replace("\n",Environment.NewLine) +
+                            "This page won't display the new category until you start labeling transactions.\n".Replace("\n",Environment.NewLine) +
+                            "After labeling a couple transactions can then come back here to see your tracked\n".Replace("\n",Environment.NewLine) +
                             "totals.";
             await status.ShowAsync();
         }
