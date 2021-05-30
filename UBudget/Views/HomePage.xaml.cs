@@ -64,6 +64,11 @@ namespace UBudget.Views
         private void BaseServicer_DataBaseUpdate(object sender, EventArgs e)
         {
             var _account = Accounts.FirstOrDefault((x) => x.ID == (sender as Account).ID);
+            if (_account == null)
+            {
+                Accounts.Add(_account);
+                return;
+            }
             _account.Value = (sender as Account).Value;
         }
 
