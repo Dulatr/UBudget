@@ -102,7 +102,7 @@ namespace UBudget.Views
             MainPage mp = mf.Content as MainPage;
             mp.BudgetCategories.Remove(mp.BudgetCategories.First((x) => x.Name == selected_category.Name));
             mp.LabelsBox.SelectedIndex = 0;
-            status.Content = $"Category: {selected_category.Name}, has been succesfully deleted!";
+            status.Content = $"Category: `{selected_category.Name.ToUpper()}`, has been succesfully deleted!";
             await status.ShowAsync();
         }
 
@@ -122,7 +122,7 @@ namespace UBudget.Views
             
             if (App.Servicer.categoryExists(name))
             {
-                status.Content = $"A category already exists with the name: {name}.";
+                status.Content = $"A category already exists with the name: `{name.ToUpper()}`.";
                 await status.ShowAsync();
                 return;
             }
@@ -136,7 +136,7 @@ namespace UBudget.Views
             mp.BudgetCategories.Add(addedCategory);
             status.Content = $"`{name.ToUpper()}` successfully added as a category!\n\n".Replace("\n",Environment.NewLine) +
                             "This page won't display the new category until you start labeling transactions.\n".Replace("\n",Environment.NewLine) +
-                            "After labeling a couple transactions can then come back here to see your tracked\n".Replace("\n",Environment.NewLine) +
+                            "After labeling a couple transactions can then come back here to see your tracked" +
                             "totals.";
             await status.ShowAsync();
         }
