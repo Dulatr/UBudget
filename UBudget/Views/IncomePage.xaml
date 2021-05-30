@@ -9,70 +9,85 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="9*"/>
+        </Grid.RowDefinitions>
+        <Border BorderThickness="2" BorderBrush="Transparent" 
+                Background="{ThemeResource HubSectionHeaderPressedForegroundThemeBrush}">
+            <Viewbox Stretch="Uniform" Margin="7">
+                <TextBlock Text="Paystubs" 
+                           TextAlignment="Center" 
+                           FontWeight="Bold" FontFamily="Arial"/>
+            </Viewbox>
+        </Border>
 
-    <SplitView IsPaneOpen="True"
-            DisplayMode="Inline"
-            OpenPaneLength="300"
-            Grid.Row="1">
-        <SplitView.Pane>
-            <ListView x:Name="PayStubs"
-                        ItemsSource="{Binding PayStub}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="3*"/>
-                            </Grid.ColumnDefinitions>
-                            <Viewbox Stretch="Uniform"
-                                        Margin="14"
-                                        Grid.Column="0">
-                                <TextBlock Text="{Binding Label}"
+        <SplitView IsPaneOpen="True"
+                DisplayMode="Inline"
+                OpenPaneLength="300"
+                Grid.Row="1">
+            <SplitView.Pane>
+                <ListView x:Name="PayStubs"
+                            ItemsSource="{Binding PayStub}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="3*"/>
+                                </Grid.ColumnDefinitions>
+                                <Viewbox Stretch="Uniform"
+                                            Margin="14"
+                                            Grid.Column="0">
+                                    <TextBlock Text="{Binding Label}"
+                                                HorizontalAlignment="Center"/>
+                                </Viewbox>
+                                <TextBlock Text="{Binding Date}"
+                                            Grid.Column="1"
                                             HorizontalAlignment="Center"/>
-                            </Viewbox>
-                            <TextBlock Text="{Binding Date}"
-                                        Grid.Column="1"
-                                        HorizontalAlignment="Center"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </SplitView.Pane>
-        <SplitView.Content>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="{x:Bind StubDateConverter,Mode=TwoWay}" 
-                    Grid.ColumnSpan="2"/>
-                <TextBlock Text="{x:Bind SelectedStubView.Label,Mode=TwoWay}"
-                    Grid.Column="2" Grid.ColumnSpan="2"/>
-                <TextBlock Text="{x:Bind SelectedStubView.NetAmount,Mode=TwoWay}"
-                    Grid.Row="1"/>
-                <TextBlock Text="{x:Bind SelectedStubView.SIT,Mode=TwoWay}"
-                    Grid.Row="1" Grid.Column="1"/>
-                <TextBlock Text="{x:Bind selectedStubView.FIT,Mode=TwoWay}"
-                    Grid.Row="1" Grid.Column="2"/>
-                <TextBlock Text="{x:Bind SelectedStubView.MiscTax,Mode=TwoWay}"
-                    Grid.Row="1" Grid.Column="3"/>
-                <TextBlock Text="{x:Bind SelectedStubView.GrossAmount,Mode=OneWay}"
-                    Grid.Row="2" Grid.RowSpan="2"
-                    Grid.ColumnSpan="2"/>
-                <TextBlock Text="{x:Bind SelectedStubView.PayStubID,Mode=TwoWay}"
-                    Grid.Row="2" Grid.Column="2"
-                    Grid.RowSpan="2" Grid.ColumnSpan="2"/>
-            </Grid>
-        </SplitView.Content>
-    </SplitView>        
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{x:Bind StubDateConverter,Mode=TwoWay}" 
+                        Grid.ColumnSpan="2"/>
+                    <TextBlock Text="{x:Bind SelectedStubView.Label,Mode=TwoWay}"
+                        Grid.Column="2" Grid.ColumnSpan="2"/>
+                    <TextBlock Text="{x:Bind SelectedStubView.NetAmount,Mode=TwoWay}"
+                        Grid.Row="1"/>
+                    <TextBlock Text="{x:Bind SelectedStubView.SIT,Mode=TwoWay}"
+                        Grid.Row="1" Grid.Column="1"/>
+                    <TextBlock Text="{x:Bind selectedStubView.FIT,Mode=TwoWay}"
+                        Grid.Row="1" Grid.Column="2"/>
+                    <TextBlock Text="{x:Bind SelectedStubView.MiscTax,Mode=TwoWay}"
+                        Grid.Row="1" Grid.Column="3"/>
+                    <TextBlock Text="{x:Bind SelectedStubView.GrossAmount,Mode=OneWay}"
+                        Grid.Row="2" Grid.RowSpan="2"
+                        Grid.ColumnSpan="2"/>
+                    <TextBlock Text="{x:Bind SelectedStubView.PayStubID,Mode=TwoWay}"
+                        Grid.Row="2" Grid.Column="2"
+                        Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>           
+    </Grid>
+     
 
         
 
