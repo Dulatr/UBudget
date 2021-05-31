@@ -68,7 +68,7 @@ namespace UBudget.DAO
             else
             {
                 return App.Database.GetCollection<PayStub>("paystubs").Find(
-                    (x) => (x.Date >= start && x.Date <= end)
+                    (x) => (x.Date >= start && x.Date <= end.AddHours(24.0))
                 ).ToList();
             }
 
@@ -152,20 +152,34 @@ namespace UBudget.DAO
         public void addLabel(string label,int txID)
         {
             var collection = App.Database.GetCollection<Transaction>("transactions");
+            var budgets = App.Database.GetCollection<BudgetCategory>("BudgetCategories");
             var transaction = collection.FindOne(x => x.TxID == txID);
 
             transaction.Label = label;
 
+            // Since this involves a particular budget category, make sure to update the total
+            var thisBudget = budgets.FindOne((x) => x.Name == label);
+            thisBudget.Amount += transaction.Amount;
+
+            budgets.Update(thisBudget);
             collection.Update(transaction);
         }
         public void rmLabel(int txID)
         {
-            var colllection = App.Database.GetCollection<Transaction>("transactions");
-            var transaction = colllection.FindOne(x => x.TxID == txID);
+            var collection = App.Database.GetCollection<Transaction>("transactions");
+            var budgets = App.Database.GetCollection<BudgetCategory>("BudgetCategories");
+            var transaction = collection.FindOne(x => x.TxID == txID);
+            var thisBudget = budgets.FindOne(x => x.Name == transaction.Label);
 
             transaction.Label = "";
 
-            colllection.Update(transaction);
+            if (thisBudget != null)
+            {
+                thisBudget.Amount -= transaction.Amount;
+                budgets.Update(thisBudget);
+            }
+
+            collection.Update(transaction);
         }
         public void addCategory(string name)
         {
