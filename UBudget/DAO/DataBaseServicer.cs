@@ -68,7 +68,7 @@ namespace UBudget.DAO
             else
             {
                 return App.Database.GetCollection<PayStub>("paystubs").Find(
-                    (x) => (x.Date >= start && x.Date <= end)
+                    (x) => (x.Date >= start && x.Date <= end.AddHours(24.0))
                 ).ToList();
             }
 
