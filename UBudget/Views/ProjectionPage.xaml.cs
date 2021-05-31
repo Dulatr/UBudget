@@ -117,21 +117,24 @@ namespace UBudget.Views
 
             for (int i = 0; i < 3; i++)
             {
-                accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * i));
+                // Default is bi-weekly for selection, so 2 * indexer
+                accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * 2.0 * i));
             }
 
             accountTotal.IsStacked = true;
+
+            // the 0th series is always the account totals
+            series.Add(accountTotal);
 
             foreach (BudgetCategory category in App.Servicer.getAllBudgetCategories())
             {
                 series.Add(new ColumnSeries()
                 {
                     Title = category.Name,
-                    IsStacked = true
+                    IsStacked = true,
                 });
             }
 
-            series.Add(accountTotal);
             #endregion
 
             foreach (ColumnSeries s in series)
@@ -161,11 +164,9 @@ namespace UBudget.Views
         private void UpdateSeries(double frequency = 1.0, double length = 3.0)
         {
             DateTime today = DateTime.Today;
-            //double _billAmount = getBillTotal();
+            var budgets = App.Servicer.getAllBudgetCategories();
             double _incomeAmount = getRecentPaystubTotal();
             double _accountTotal = getAccountsTotal();
-            //double _mistTotal = getMiscTotal();
-            //double _foodTotal = getFoodTotal();
 
             accountTotal.Items.Clear();
             
@@ -178,16 +179,25 @@ namespace UBudget.Views
 
             for (int i = 0; i < length; i++)
             {
-                accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * i));
+                accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * frequency * i));
             }
 
-            //for (int i = 0; i < length; i++)
-            //{
-            //    billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
-            //    miscTotal.Items.Add(new ColumnItem(_mistTotal));
-            //    foodTotal.Items.Add(new ColumnItem(_foodTotal));
-            //    accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * frequency * i - _billAmount * i - _mistTotal * i - _foodTotal * i) { Color = OxyColors.ForestGreen });
-            //}
+            foreach (ColumnSeries s in series)
+            {
+                // get the current month budget totals
+                // var category = App.Servicer.getCurrentBudgetTotal(s.Title);
+                if (s != accountTotal)
+                {
+                    for (int i = 0; i < length; i++)
+                    {
+                        s.Items.Add(new ColumnItem(
+                            budgets.Find((x) => x.Name == s.Title).Amount
+                        )
+                        { Color = OxyColors.Red });
+                    }
+
+                }
+            }
 
             for (int i = 0; i < length; i++)
             {
@@ -200,7 +210,6 @@ namespace UBudget.Views
 
             Data.Axes.Add(categoryAxis);
             Data.Axes.Add(linearAxis);
-            //Data.Series.Add(accountTotal);
             
             foreach (ColumnSeries s in series)
             {
@@ -235,64 +244,64 @@ namespace UBudget.Views
 
             return _stubTotal;
         }
-        private double getBillTotal()
-        {
-            double _billAmount = 0.0;
+        //private double getBillTotal()
+        //{
+        //    double _billAmount = 0.0;
 
-            var txs = App.Servicer.getAllTx(
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
-            );
+        //    var txs = App.Servicer.getAllTx(
+        //        new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
+        //        new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
+        //    );
 
-            var bills = txs?.FindAll(
-                (x) => x.Label == "Bills"
-            );
+        //    var bills = txs?.FindAll(
+        //        (x) => x.Label == "Bills"
+        //    );
 
-            foreach (Transaction bill in bills)
-            {
-                _billAmount += bill.Amount;
-            }
+        //    foreach (Transaction bill in bills)
+        //    {
+        //        _billAmount += bill.Amount;
+        //    }
 
-            return _billAmount;
-        }
-        private double getFoodTotal()
-        {
-            double _foodAmount = 0.0;
+        //    return _billAmount;
+        //}
+        //private double getFoodTotal()
+        //{
+        //    double _foodAmount = 0.0;
 
-            var txs = App.Servicer.getAllTx(
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
-            );
+        //    var txs = App.Servicer.getAllTx(
+        //        new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
+        //        new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
+        //    );
 
-            var foodTxs = txs?.FindAll(
-                (x) => x.Label == "Food"
-            );
+        //    var foodTxs = txs?.FindAll(
+        //        (x) => x.Label == "Food"
+        //    );
 
-            foreach (Transaction foodPurchase in foodTxs)
-            {
-                _foodAmount += foodPurchase.Amount;
-            }
-            return _foodAmount;
-        }
-        private double getMiscTotal()
-        {
-            double _miscAmount = 0.0;
+        //    foreach (Transaction foodPurchase in foodTxs)
+        //    {
+        //        _foodAmount += foodPurchase.Amount;
+        //    }
+        //    return _foodAmount;
+        //}
+        //private double getMiscTotal()
+        //{
+        //    double _miscAmount = 0.0;
 
-            var txs = App.Servicer.getAllTx(
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
-                new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
-            );
+        //    var txs = App.Servicer.getAllTx(
+        //        new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
+        //        new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
+        //    );
 
-            var miscTxs = txs?.FindAll(
-                (x) => x.Label == "Misc."
-            );
+        //    var miscTxs = txs?.FindAll(
+        //        (x) => x.Label == "Misc."
+        //    );
 
-            foreach (Transaction miscPurchase in miscTxs)
-            {
-                _miscAmount += miscPurchase.Amount;
-            }
-            return _miscAmount;
-        }
+        //    foreach (Transaction miscPurchase in miscTxs)
+        //    {
+        //        _miscAmount += miscPurchase.Amount;
+        //    }
+        //    return _miscAmount;
+        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
