@@ -111,7 +111,7 @@ namespace UBudget.Views
                 for (int i = 0; i < 3; i++)
                 {
                     series.Last().Items.Add(new ColumnItem(category.Amount));
-                    accountTotal.Items[i].Value -= series.Last().Items[i].Value;
+                    accountTotal.Items[i].Value -= series.Last().Items[i].Value * i;
                 }
             }
 
@@ -165,15 +165,15 @@ namespace UBudget.Views
             foreach (ColumnSeries s in series)
             {
                 // get the current month budget totals
-                // var category = App.Servicer.getCurrentBudgetTotal(s.Title);
                 if (s != accountTotal)
                 {
                     for (int i = 0; i < length; i++)
                     {
                         s.Items.Add(new ColumnItem(
                             budgets.Find((x) => x.Name == s.Title).Amount
-                        )
-                        { Color = OxyColors.Red });
+                        ));
+
+                        accountTotal.Items[i].Value -= series.Last().Items[i].Value * i;
                     }
 
                 }
