@@ -29,9 +29,6 @@ namespace UBudget.Views
             set { data = value; OnPropertyChanged(nameof(Data)); }
         }
         private ColumnSeries accountTotal = new ColumnSeries() { FillColor = OxyColors.ForestGreen };
-        //private ColumnSeries billTotal = new ColumnSeries() { FillColor = OxyColors.Red };
-        //private ColumnSeries foodTotal = new ColumnSeries() { FillColor = OxyColors.BlueViolet };
-        //private ColumnSeries miscTotal = new ColumnSeries() { FillColor = OxyColors.DarkOrange };
         private CategoryAxis categoryAxis = new CategoryAxis();
         private LinearAxis linearAxis = new LinearAxis();
 
@@ -46,11 +43,8 @@ namespace UBudget.Views
 
             Data = new PlotModel();   
             DateTime today = DateTime.Today;
-            //double _billAmount = getBillTotal();
             double _incomeAmount = getRecentPaystubTotal();
             double _accountTotal = getAccountsTotal();
-            //double _miscAmount = getMiscTotal();
-            //double _foodAmount = getFoodTotal();
             
             #region Plot and Axis Settings
 
@@ -60,9 +54,6 @@ namespace UBudget.Views
             linearAxis.Title = "Net Value in USD";
             categoryAxis.Title = "Date";
             accountTotal.Title = "Account Total";
-            //billTotal.Title = "Bill Total";
-            //miscTotal.Title = "Misc Total";
-            //foodTotal.Title = "Food Total";
 
             Data.TitleFontSize = 24;
             Data.LegendPlacement = LegendPlacement.Inside;
@@ -99,22 +90,6 @@ namespace UBudget.Views
             Data.Axes.Add(categoryAxis);
             Data.Axes.Add(linearAxis);
 
-            //billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
-            //billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
-            //billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
-
-            //foodTotal.Items.Add(new ColumnItem(_foodAmount));
-            //foodTotal.Items.Add(new ColumnItem(_foodAmount));
-            //foodTotal.Items.Add(new ColumnItem(_foodAmount));
-
-            //miscTotal.Items.Add(new ColumnItem(_miscAmount));
-            //miscTotal.Items.Add(new ColumnItem(_miscAmount));
-            //miscTotal.Items.Add(new ColumnItem(_miscAmount));
-
-            //accountTotal.Items.Add(new ColumnItem(_accountTotal) { Color = OxyColors.ForestGreen });
-            //accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * 2.0 - _billAmount - _foodAmount - _miscAmount) { Color = OxyColors.ForestGreen });
-            //accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * 4.0 - _billAmount * 2.0 - _foodAmount * 2.0 - _miscAmount * 2.0) { Color = OxyColors.ForestGreen });
-
             for (int i = 0; i < 3; i++)
             {
                 // Default is bi-weekly for selection, so 2 * indexer
@@ -133,6 +108,11 @@ namespace UBudget.Views
                     Title = category.Name,
                     IsStacked = true,
                 });
+                for (int i = 0; i < 3; i++)
+                {
+                    series.Last().Items.Add(new ColumnItem(category.Amount));
+                    accountTotal.Items[i].Value -= series.Last().Items[i].Value;
+                }
             }
 
             #endregion
