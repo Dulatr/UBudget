@@ -224,64 +224,6 @@ namespace UBudget.Views
 
             return _stubTotal;
         }
-        //private double getBillTotal()
-        //{
-        //    double _billAmount = 0.0;
-
-        //    var txs = App.Servicer.getAllTx(
-        //        new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
-        //        new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
-        //    );
-
-        //    var bills = txs?.FindAll(
-        //        (x) => x.Label == "Bills"
-        //    );
-
-        //    foreach (Transaction bill in bills)
-        //    {
-        //        _billAmount += bill.Amount;
-        //    }
-
-        //    return _billAmount;
-        //}
-        //private double getFoodTotal()
-        //{
-        //    double _foodAmount = 0.0;
-
-        //    var txs = App.Servicer.getAllTx(
-        //        new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
-        //        new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
-        //    );
-
-        //    var foodTxs = txs?.FindAll(
-        //        (x) => x.Label == "Food"
-        //    );
-
-        //    foreach (Transaction foodPurchase in foodTxs)
-        //    {
-        //        _foodAmount += foodPurchase.Amount;
-        //    }
-        //    return _foodAmount;
-        //}
-        //private double getMiscTotal()
-        //{
-        //    double _miscAmount = 0.0;
-
-        //    var txs = App.Servicer.getAllTx(
-        //        new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1),
-        //        new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month))
-        //    );
-
-        //    var miscTxs = txs?.FindAll(
-        //        (x) => x.Label == "Misc."
-        //    );
-
-        //    foreach (Transaction miscPurchase in miscTxs)
-        //    {
-        //        _miscAmount += miscPurchase.Amount;
-        //    }
-        //    return _miscAmount;
-        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
