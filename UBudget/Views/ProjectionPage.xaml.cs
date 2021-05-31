@@ -29,11 +29,13 @@ namespace UBudget.Views
             set { data = value; OnPropertyChanged(nameof(Data)); }
         }
         private ColumnSeries accountTotal = new ColumnSeries() { FillColor = OxyColors.ForestGreen };
-        private ColumnSeries billTotal = new ColumnSeries() { FillColor = OxyColors.Red };
-        private ColumnSeries foodTotal = new ColumnSeries() { FillColor = OxyColors.BlueViolet };
-        private ColumnSeries miscTotal = new ColumnSeries() { FillColor = OxyColors.DarkOrange };
+        //private ColumnSeries billTotal = new ColumnSeries() { FillColor = OxyColors.Red };
+        //private ColumnSeries foodTotal = new ColumnSeries() { FillColor = OxyColors.BlueViolet };
+        //private ColumnSeries miscTotal = new ColumnSeries() { FillColor = OxyColors.DarkOrange };
         private CategoryAxis categoryAxis = new CategoryAxis();
         private LinearAxis linearAxis = new LinearAxis();
+
+        private List<ColumnSeries> series = new List<ColumnSeries>();
 
         private bool HasLoaded = false;
         private readonly int[] months = new int[] { 3, 6, 12, 24 };
@@ -44,11 +46,11 @@ namespace UBudget.Views
 
             Data = new PlotModel();   
             DateTime today = DateTime.Today;
-            double _billAmount = getBillTotal();
+            //double _billAmount = getBillTotal();
             double _incomeAmount = getRecentPaystubTotal();
             double _accountTotal = getAccountsTotal();
-            double _miscAmount = getMiscTotal();
-            double _foodAmount = getFoodTotal();
+            //double _miscAmount = getMiscTotal();
+            //double _foodAmount = getFoodTotal();
             
             #region Plot and Axis Settings
 
@@ -58,9 +60,9 @@ namespace UBudget.Views
             linearAxis.Title = "Net Value in USD";
             categoryAxis.Title = "Date";
             accountTotal.Title = "Account Total";
-            billTotal.Title = "Bill Total";
-            miscTotal.Title = "Misc Total";
-            foodTotal.Title = "Food Total";
+            //billTotal.Title = "Bill Total";
+            //miscTotal.Title = "Misc Total";
+            //foodTotal.Title = "Food Total";
 
             Data.TitleFontSize = 24;
             Data.LegendPlacement = LegendPlacement.Inside;
@@ -97,33 +99,45 @@ namespace UBudget.Views
             Data.Axes.Add(categoryAxis);
             Data.Axes.Add(linearAxis);
 
-            billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
-            billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
-            billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
+            //billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
+            //billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
+            //billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
 
-            foodTotal.Items.Add(new ColumnItem(_foodAmount));
-            foodTotal.Items.Add(new ColumnItem(_foodAmount));
-            foodTotal.Items.Add(new ColumnItem(_foodAmount));
+            //foodTotal.Items.Add(new ColumnItem(_foodAmount));
+            //foodTotal.Items.Add(new ColumnItem(_foodAmount));
+            //foodTotal.Items.Add(new ColumnItem(_foodAmount));
 
-            miscTotal.Items.Add(new ColumnItem(_miscAmount));
-            miscTotal.Items.Add(new ColumnItem(_miscAmount));
-            miscTotal.Items.Add(new ColumnItem(_miscAmount));
+            //miscTotal.Items.Add(new ColumnItem(_miscAmount));
+            //miscTotal.Items.Add(new ColumnItem(_miscAmount));
+            //miscTotal.Items.Add(new ColumnItem(_miscAmount));
 
-            accountTotal.Items.Add(new ColumnItem(_accountTotal) { Color = OxyColors.ForestGreen });
-            accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * 2.0 - _billAmount - _foodAmount - _miscAmount) { Color = OxyColors.ForestGreen });
-            accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * 4.0 - _billAmount * 2.0 - _foodAmount * 2.0 - _miscAmount * 2.0) { Color = OxyColors.ForestGreen });
+            //accountTotal.Items.Add(new ColumnItem(_accountTotal) { Color = OxyColors.ForestGreen });
+            //accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * 2.0 - _billAmount - _foodAmount - _miscAmount) { Color = OxyColors.ForestGreen });
+            //accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * 4.0 - _billAmount * 2.0 - _foodAmount * 2.0 - _miscAmount * 2.0) { Color = OxyColors.ForestGreen });
+
+            for (int i = 0; i < 3; i++)
+            {
+                accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * i));
+            }
 
             accountTotal.IsStacked = true;
-            billTotal.IsStacked = true;
-            miscTotal.IsStacked = true;
-            foodTotal.IsStacked = true;
 
+            foreach (BudgetCategory category in App.Servicer.getAllBudgetCategories())
+            {
+                series.Add(new ColumnSeries()
+                {
+                    Title = category.Name,
+                    IsStacked = true
+                });
+            }
+
+            series.Add(accountTotal);
             #endregion
 
-            Data.Series.Add(accountTotal);
-            Data.Series.Add(billTotal);
-            Data.Series.Add(miscTotal);
-            Data.Series.Add(foodTotal);
+            foreach (ColumnSeries s in series)
+            {
+                Data.Series.Add(s);
+            }
 
             LengthOfTimeSelectionBox.SelectedIndex = 0;
             LengthOfTimeSelectionBox.SelectionChanged += OptionsSelectionChanged;
@@ -147,25 +161,33 @@ namespace UBudget.Views
         private void UpdateSeries(double frequency = 1.0, double length = 3.0)
         {
             DateTime today = DateTime.Today;
-            double _billAmount = getBillTotal();
+            //double _billAmount = getBillTotal();
             double _incomeAmount = getRecentPaystubTotal();
             double _accountTotal = getAccountsTotal();
-            double _mistTotal = getMiscTotal();
-            double _foodTotal = getFoodTotal();
+            //double _mistTotal = getMiscTotal();
+            //double _foodTotal = getFoodTotal();
 
             accountTotal.Items.Clear();
-            billTotal.Items.Clear();
-            miscTotal.Items.Clear();
-            foodTotal.Items.Clear();
+            
+            foreach (ColumnSeries s in series)
+            {
+                s.Items.Clear();
+            }
+
             categoryAxis.Labels.Clear();
 
             for (int i = 0; i < length; i++)
             {
-                billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
-                miscTotal.Items.Add(new ColumnItem(_mistTotal));
-                foodTotal.Items.Add(new ColumnItem(_foodTotal));
-                accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * frequency * i - _billAmount * i - _mistTotal * i - _foodTotal * i) { Color = OxyColors.ForestGreen });
+                accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * i));
             }
+
+            //for (int i = 0; i < length; i++)
+            //{
+            //    billTotal.Items.Add(new ColumnItem(_billAmount) { Color = OxyColors.Red });
+            //    miscTotal.Items.Add(new ColumnItem(_mistTotal));
+            //    foodTotal.Items.Add(new ColumnItem(_foodTotal));
+            //    accountTotal.Items.Add(new ColumnItem(_accountTotal + _incomeAmount * frequency * i - _billAmount * i - _mistTotal * i - _foodTotal * i) { Color = OxyColors.ForestGreen });
+            //}
 
             for (int i = 0; i < length; i++)
             {
@@ -178,10 +200,12 @@ namespace UBudget.Views
 
             Data.Axes.Add(categoryAxis);
             Data.Axes.Add(linearAxis);
-            Data.Series.Add(accountTotal);
-            Data.Series.Add(billTotal);
-            Data.Series.Add(miscTotal);
-            Data.Series.Add(foodTotal);
+            //Data.Series.Add(accountTotal);
+            
+            foreach (ColumnSeries s in series)
+            {
+                Data.Series.Add(s);
+            }
         }
         private double getAccountsTotal()
         {
